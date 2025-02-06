@@ -23,6 +23,7 @@ public class DTOLabParameter {
     private Integer consumerDelayMax;
 
     private boolean isRunning;
+    private boolean stopRequest;
 
     public DTOLabParameter(){
         resetData();
@@ -32,19 +33,20 @@ public class DTOLabParameter {
         this.isSynchronized = false;
         this.isPreventingNegativeStock = false;
 
-        this.numberProducers = 0;
-        this.producerItemQuantity = 0;
+        this.numberProducers = 1;
+        this.producerItemQuantity = 1;
 
-        this.numberConsumers = 0;
-        this.consumerItemQuantity = 0;
+        this.numberConsumers = 1;
+        this.consumerItemQuantity = 1;
 
         this.isEnableProducerMaxTime = false;
-        this.producerDelayMax = 0;
+        this.producerDelayMax = 1;
 
         this.isEnableConsumerMaxTime = false;
-        this.consumerDelayMax = 0;
+        this.consumerDelayMax = 1;
 
         this.isRunning = true;
+        this.stopRequest = false;
     }
 
     @Override
@@ -61,6 +63,7 @@ public class DTOLabParameter {
                 ", isEnableConsumerMaxTime=" + isEnableConsumerMaxTime +
                 ", consumerDelayMax=" + consumerDelayMax +
                 ", isRunning=" + isRunning +
+                ", isStopRequest=" + stopRequest +
                 '}';
     }
 }

@@ -22,7 +22,6 @@ public class Producer implements Runnable {
 
     @Override
     public void run() {
-        this.model.getController().getLabResult().incrementProducerQuantity();
         try {
             this.startTime = System.currentTimeMillis();
             status = "Esperando para iniciar";
@@ -33,6 +32,11 @@ public class Producer implements Runnable {
 
             status = "Produciendo";
             for (int i = 0; i < itemQuantity; i++) {
+                //Cerrado de hilo
+                if (this.model.getController().getLabParameter().isStopRequest()){
+                    return;
+                }
+
                 while (!model.getController().getLabParameter().isRunning()) {
                     if (enableProducerMaxTime && (System.currentTimeMillis() - startTime >= producerDelayMax)) {
                         status = "Finalizado (Tiempo excedido)";
@@ -42,20 +46,17 @@ public class Producer implements Runnable {
                     }
                     Thread.sleep(100);
                 }
-
                 model.getProduct().increaseQuantity();
                 production++;
             }
-
             status = "Finalizado";
-            this.model.getController().getLabResult().decrementProducerQuantity();
+            this.model.increaseFinalizedProducerQuantity();
             endTime = System.currentTimeMillis();
             processingTime = endTime - startTime;
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             status = "Interrumpido";
-            this.model.getController().getLabResult().decrementProducerQuantity();
         }
     }
 }

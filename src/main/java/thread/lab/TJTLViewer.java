@@ -2,7 +2,6 @@ package thread.lab;
 
 import lombok.Getter;
 import lombok.Setter;
-import thread.lab.dto.DTOLabResult;
 import thread.lab.viewerPanels.ControlPanel;
 import thread.lab.viewerPanels.LabParameterPanel;
 import thread.lab.viewerPanels.LabResultsPanel;
@@ -74,18 +73,31 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         this.controlPanel.getDefaultConfiguration().addActionListener(this);
     }
 
-    private void updateParameter(){
+    private void updateLabParameterPanel(){
+        this.labParameterPanel.getIsSynchronized().setSelected(this.controller.getLabParameter().isSynchronized());
+        this.labParameterPanel.getIsPreventingNegativeStock().setSelected(this.controller.getLabParameter().isPreventingNegativeStock());
 
+        this.labParameterPanel.getNumberProducers().setValue((Integer)this.controller.getLabParameter().getNumberProducers());
+        this.labParameterPanel.getProducerItemQuantity().setValue((Integer)this.controller.getLabParameter().getProducerItemQuantity());
+
+        this.labParameterPanel.getNumberConsumers().setValue((Integer)this.controller.getLabParameter().getNumberConsumers());
+        this.labParameterPanel.getConsumerItemQuantity().setValue((Integer)this.controller.getLabParameter().getConsumerItemQuantity());
+
+        this.labParameterPanel.getIsEnableProducerMaxTime().setSelected(this.controller.getLabParameter().isEnableProducerMaxTime());
+        this.labParameterPanel.getProducerDelayMax().setValue((Integer)this.controller.getLabParameter().getProducerDelayMax());
+
+        this.labParameterPanel.getIsEnableConsumerMaxTime().setSelected(this.controller.getLabParameter().isEnableConsumerMaxTime());
+        this.labParameterPanel.getConsumerDelayMax().setValue((Integer)this.controller.getLabParameter().getConsumerDelayMax());
     }
 
     private void updateResults(){
-        DTOLabResult labResult = this.controller.getLabResult();
-        this.labResultsPanel.getProductQuantity().setText(String.valueOf(labResult.getProductQuantity()));
-        this.labResultsPanel.getProducerQuantity().setText(String.valueOf(labResult.getProducerQuantity()));
-        this.labResultsPanel.getConsumerQuantity().setText(String.valueOf(labResult.getConsumerQuantity()));
-        this.labResultsPanel.getProcessingProducerQuantity().setText(String.valueOf(labResult.getProcessingProducerQuantity()));
-        this.labResultsPanel.getProcessingConsumerQuantity().setText(String.valueOf(labResult.getProcessingConsumerQuantity()));
-        this.labResultsPanel.getTotalTimer().setText(String.valueOf(labResult.getTotalTimer()));
+        this.labResultsPanel.getProductQuantity().setText(String.valueOf(this.controller.getModel().getProduct().getQuantity()));
+
+        this.labResultsPanel.getProducerQuantity().setText(String.valueOf(this.controller.getModel().getProducers().size()));
+        this.labResultsPanel.getConsumerQuantity().setText(String.valueOf(this.controller.getModel().getConsumers().size()));
+
+        this.labResultsPanel.getFinalizedConsumerQuantity().setText(String.valueOf(this.controller.getModel().getFinalizedConsumerQuantity()));
+        this.labResultsPanel.getFinalizedProducerQuantity().setText(String.valueOf(this.controller.getModel().getFinalizedProducerQuantity()));
     }
 
     @Override
@@ -94,21 +106,35 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
 
         switch (actionCommand){
             case "START":
+                if (!this.controller.getLabParameter().isRunning()){
+                    this.controller.getLabParameter().setRunning(true);
+                }else {
+                    this.controller.startModel();
+                }
+
                 this.controlPanel.getStart().setText("PAUSE");
                 this.controlPanel.getStart().setSelected(true);
-                this.controller.startModel();
                 break;
             case "PAUSE":
+                this.controller.getLabParameter().setRunning(false);
+
                 this.controlPanel.getStart().setSelected(false);
                 this.controlPanel.getStart().setText("START");
                 break;
             case "STOP":
+                this.controller.stopAllThreads();
                 this.controller.resetDTO();
+                this.controller.getModel().resetVariables();
+                updateLabParameterPanel();
+
                 this.controlPanel.getStart().setSelected(false);
                 this.controlPanel.getStart().setText("START");
                 break;
             case "Default Configuration":
                 this.controller.resetDTO();
+                this.controller.getModel().resetVariables();
+                this.controller.stopAllThreads();
+                updateLabParameterPanel();
                 break;
             case "Load Configuration":
                 this.controller.updateLabParameterDTO();
@@ -124,7 +150,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
             updateResults();
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;

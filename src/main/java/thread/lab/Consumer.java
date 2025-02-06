@@ -22,7 +22,6 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        this.model.getController().getLabResult().incrementConsumerQuantity();
         try {
             this.startTime = System.currentTimeMillis();
             status = "Esperando para consumir";
@@ -33,6 +32,11 @@ public class Consumer implements Runnable {
 
             status = "Consumiendo";
             for (int i = 0; i < itemQuantity; i++) {
+                //Cerrado de hilo
+                if (this.model.getController().getLabParameter().isStopRequest()){
+                    return;
+                }
+
                 while (!model.getController().getLabParameter().isRunning()) {
                     if (enableConsumerMaxTime && (System.currentTimeMillis() - startTime >= consumerDelayMax)) {
                         status = "Finalizado (Tiempo excedido)";
@@ -42,20 +46,17 @@ public class Consumer implements Runnable {
                     }
                     Thread.sleep(100);
                 }
-
                 this.model.getProduct().decreaseQuantity();
                 consumption++;
             }
-
             status = "Finalizado";
-            this.model.getController().getLabResult().decrementConsumerQuantity();
+            this.model.increaseFinalizedConsumerQuantity();
             endTime = System.currentTimeMillis();
             processingTime = endTime - startTime;
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             status = "Interrumpido";
-            this.model.getController().getLabResult().decrementConsumerQuantity();
         }
     }
 }

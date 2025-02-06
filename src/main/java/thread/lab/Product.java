@@ -13,7 +13,7 @@ public class Product {
 
     public Product(TJTLModel model){
         this.model = model;
-        this.quantity = this.model.getController().getLabParameter().getTotalResources();
+        this.quantity = 0;
         this.isSynchronized = this.model.getController().getLabParameter().isSynchronized();
         this.isPreventingNegativeStock = this.model.getController().getLabParameter().isPreventingNegativeStock();
     }
@@ -22,12 +22,10 @@ public class Product {
         if (isSynchronized) {
             synchronized (this) {
                 quantity++;
-                this.model.getController().getLabResult().setProductQuantity(quantity);
                 notify();
             }
         } else {
             quantity++;
-            this.model.getController().getLabResult().setProductQuantity(quantity);
         }
     }
 
@@ -43,14 +41,12 @@ public class Product {
                     }
                 }
                 quantity--;
-                this.model.getController().getLabResult().setProductQuantity(quantity);
             }
         } else {
             if (isPreventingNegativeStock && quantity <= 0) {
                 return;
             }
             quantity--;
-            this.model.getController().getLabResult().setProductQuantity(quantity);
         }
     }
 }

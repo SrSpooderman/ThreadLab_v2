@@ -12,8 +12,9 @@ public class LabResultsPanel extends JPanel {
     private JTextField producerQuantity;
     private JTextField consumerQuantity;
 
-    private JTextField processingProducerQuantity;
-    private JTextField processingConsumerQuantity;
+    private JTextField finalizedProducerQuantity;
+    private JTextField finalizedConsumerQuantity;
+
     private JTextField totalTimer;
 
     public LabResultsPanel(){
@@ -23,10 +24,10 @@ public class LabResultsPanel extends JPanel {
         this.producerQuantity.setEditable(false);
         this.consumerQuantity = new JTextField();
         this.consumerQuantity.setEditable(false);
-        this.processingProducerQuantity = new JTextField();
-        this.processingProducerQuantity.setEditable(false);
-        this.processingConsumerQuantity = new JTextField();
-        this.processingConsumerQuantity.setEditable(false);
+        this.finalizedProducerQuantity = new JTextField();
+        this.finalizedProducerQuantity.setEditable(false);
+        this.finalizedConsumerQuantity = new JTextField();
+        this.finalizedConsumerQuantity.setEditable(false);
         this.totalTimer = new JTextField();
         this.totalTimer.setEditable(false);
 
@@ -38,8 +39,8 @@ public class LabResultsPanel extends JPanel {
         this.productQuantity.setText("Esperando datos...");
         this.producerQuantity.setText("Esperando datos...");
         this.consumerQuantity.setText("Esperando datos...");
-        this.processingProducerQuantity.setText("Esperando datos...");
-        this.processingConsumerQuantity.setText("Esperando datos...");
+        this.finalizedProducerQuantity.setText("Esperando datos...");
+        this.finalizedConsumerQuantity.setText("Esperando datos...");
         this.totalTimer.setText("Esperando inicio...");
     }
 
@@ -75,17 +76,17 @@ public class LabResultsPanel extends JPanel {
 
         constraints.gridx = 0;
         constraints.gridy = 3;
-        add(new JLabel("Processing Producer Quantity:"), constraints);
+        add(new JLabel("Finalized Producer Quantity:"), constraints);
 
         constraints.gridx = 1;
-        add(processingProducerQuantity, constraints);
+        add(finalizedProducerQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 4;
-        add(new JLabel("Processing Consumer Quantity:"), constraints);
+        add(new JLabel("Finalized Consumer Quantity:"), constraints);
 
         constraints.gridx = 1;
-        add(processingConsumerQuantity, constraints);
+        add(finalizedConsumerQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 5;
