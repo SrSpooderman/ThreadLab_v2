@@ -45,9 +45,6 @@ public class LabResultsPanel extends JPanel {
     }
 
     private void addComponentsToPanel() {
-        Color colorBackground = new Color(0xDD88CF);
-        Color colorForeground = new Color(0xF8E7F6);
-
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;

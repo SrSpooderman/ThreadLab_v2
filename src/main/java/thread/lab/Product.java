@@ -7,25 +7,35 @@ import lombok.Setter;
 @Setter
 public class Product {
     private TJTLModel model;
-    private int quantity;
+    private String productID;
+    private Integer quantity;
     private boolean isSynchronized;
     private boolean isPreventingNegativeStock;
 
-    public Product(TJTLModel model){
+    private Integer quantityConsumed;
+    private Integer quantityProduced;
+
+    public Product(TJTLModel model, String productID){
         this.model = model;
+        this.productID = productID;
         this.quantity = 0;
         this.isSynchronized = this.model.getController().getLabParameter().isSynchronized();
         this.isPreventingNegativeStock = this.model.getController().getLabParameter().isPreventingNegativeStock();
+
+        this.quantityConsumed = 0;
+        this.quantityProduced = 0;
     }
 
     public void increaseQuantity() {
         if (isSynchronized) {
             synchronized (this) {
                 quantity++;
+                quantityProduced++;
                 notify();
             }
         } else {
             quantity++;
+            quantityProduced++;
         }
     }
 
@@ -41,12 +51,14 @@ public class Product {
                     }
                 }
                 quantity--;
+                quantityConsumed++;
             }
         } else {
             if (isPreventingNegativeStock && quantity <= 0) {
                 return;
             }
             quantity--;
+            quantityConsumed++;
         }
     }
 }

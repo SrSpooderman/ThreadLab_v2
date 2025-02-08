@@ -43,7 +43,7 @@ public class TJTLModel {
         this.producers = new ArrayList<>();
         this.consumers = new ArrayList<>();
 
-        this.product = new Product(this);
+        this.product = new Product(this, "Producto principal");
     }
 
     public void runProducers(){

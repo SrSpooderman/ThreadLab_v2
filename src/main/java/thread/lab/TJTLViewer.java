@@ -2,14 +2,14 @@ package thread.lab;
 
 import lombok.Getter;
 import lombok.Setter;
-import thread.lab.viewerPanels.ControlPanel;
-import thread.lab.viewerPanels.LabParameterPanel;
-import thread.lab.viewerPanels.LabResultsPanel;
+import thread.lab.viewerPanels.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,12 +18,18 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     private LabResultsPanel labResultsPanel;
     private ControlPanel controlPanel;
     private LabParameterPanel labParameterPanel;
+    private ProductPanel productPanel;
+    private ProducersPanel producersPanel;
+    private ConsumersPanel consumersPanel;
 
     public TJTLViewer (TJTLController controller){
         this.controller = controller;
         this.labResultsPanel = new LabResultsPanel();
         this.controlPanel = new ControlPanel();
         this.labParameterPanel = new LabParameterPanel();
+        this.productPanel = new ProductPanel();
+        this.consumersPanel = new ConsumersPanel();
+        this.producersPanel = new ProducersPanel();
 
         configureJFrame();
     }
@@ -31,7 +37,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     private void configureJFrame(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Thread Lab");
-        this.setSize(500,500);
+        this.setSize(1920,1080);
         this.setVisible(true);
         this.setLayout(new GridBagLayout());
         addComponentsToPane(this.getContentPane());
@@ -44,25 +50,52 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         //Primera columna
         constraints.gridx = 0;
         constraints.gridy = 0; //Fila 1
+        constraints.weightx = 0.2;
+        constraints.weighty = 0.7;
+        constraints.fill = GridBagConstraints.BOTH;
         add(labResultsPanel, constraints);
 
+        constraints.gridx = 0;
         constraints.gridy = 1; // Fila 2
+        constraints.weightx = 0.2;
+        constraints.weighty = 0.3;
         add(controlPanel, constraints);
 
         //Segunda columna
         constraints.gridx = 1;
         constraints.gridy = 0;  // Fila 1
+        constraints.weightx = 0.2;
+        constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
         add(labParameterPanel, constraints);
 
         //Tercera columna
         constraints.gridx = 2;
-        //add(a, constraints); //Fila 1
+        constraints.gridy = 0; //Fila 1
+        constraints.weightx = 0.6;
+        constraints.weighty = 0.2;
+        constraints.fill = GridBagConstraints.BOTH;
+        add(productPanel, constraints);
 
+        constraints.gridx = 2;
         constraints.gridy = 1;  // Fila 2
-        //add(a, constraints);
+        constraints.weightx = 0.6;
+        constraints.weighty = 0.4;
+        JScrollPane scrollPaneConsumer = new JScrollPane(consumersPanel);
+        scrollPaneConsumer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneConsumer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        constraints.fill = GridBagConstraints.BOTH;
+        add(scrollPaneConsumer, constraints);
 
+        constraints.gridx = 2;
         constraints.gridy = 2;  // Fila 3
-        //add(a, constraints);
+        constraints.weightx = 0.6;
+        constraints.weighty = 0.4;
+        JScrollPane scrollPaneProducer = new JScrollPane(producersPanel);
+        scrollPaneProducer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneProducer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        constraints.fill = GridBagConstraints.BOTH;
+        add(scrollPaneProducer, constraints);
 
     }
 
@@ -100,6 +133,38 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         this.labResultsPanel.getFinalizedProducerQuantity().setText(String.valueOf(this.controller.getModel().getFinalizedProducerQuantity()));
     }
 
+    private void updateProductPanel(){
+        Product product = this.controller.getModel().getProduct();
+
+        this.productPanel.getProductID().setText(String.valueOf(product.getProductID()));
+        this.productPanel.getQuantity().setText(String.valueOf(product.getQuantity()));
+        this.productPanel.getQuantityConsumed().setText(String.valueOf(product.getQuantityConsumed()));
+        this.productPanel.getQuantityProduced().setText(String.valueOf(product.getQuantityProduced()));
+    }
+
+    private void updateConsumersPanel(){
+        List<Consumer> consumers = new ArrayList<>(this.controller.getModel().getConsumers());
+
+        for (Consumer consumer : consumers){
+            if (this.controller.getLabParameter().isStopRequest()){
+                return;
+            }
+
+            this.consumersPanel.addOrUpdateConsumer(consumer);
+        }
+    }
+
+    private void updateProducersPanel(){
+        List<Producer> producers = new ArrayList<>(this.controller.getModel().getProducers());
+
+        for (Producer producer : producers){
+            if (this.controller.getLabParameter().isStopRequest()){
+                return;
+            }
+            this.producersPanel.addOrUpdateProducer(producer);
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent){
         String actionCommand = actionEvent.getActionCommand();
@@ -125,7 +190,10 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
                 this.controller.stopAllThreads();
                 this.controller.resetDTO();
                 this.controller.getModel().resetVariables();
+
                 updateLabParameterPanel();
+                this.producersPanel.clearProducers();
+                this.consumersPanel.clearConsumers();
 
                 this.controlPanel.getStart().setSelected(false);
                 this.controlPanel.getStart().setText("START");
@@ -135,6 +203,8 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
                 this.controller.getModel().resetVariables();
                 this.controller.stopAllThreads();
                 updateLabParameterPanel();
+                this.producersPanel.clearProducers();
+                this.consumersPanel.clearConsumers();
                 break;
             case "Load Configuration":
                 this.controller.updateLabParameterDTO();
@@ -148,6 +218,9 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             updateResults();
+            updateProductPanel();
+            updateConsumersPanel();
+            updateProducersPanel();
 
             try {
                 Thread.sleep(50);
