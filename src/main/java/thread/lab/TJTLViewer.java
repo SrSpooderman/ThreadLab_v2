@@ -45,58 +45,56 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     }
 
     private void addComponentsToPane(Container panel){
+        panel.setBackground(new Color(44,47,51));
         GridBagConstraints constraints = new GridBagConstraints();
 
-        //Primera columna
-        constraints.gridx = 0;
-        constraints.gridy = 0; //Fila 1
-        constraints.weightx = 0.2;
-        constraints.weighty = 0.7;
-        constraints.fill = GridBagConstraints.BOTH;
-        add(labResultsPanel, constraints);
+        //Creo un panel por columna
+        JPanel leftPanel = new JPanel(new GridBagLayout());
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        JPanel rightPanel = new JPanel(new GridBagLayout());
 
-        constraints.gridx = 0;
-        constraints.gridy = 1; // Fila 2
-        constraints.weightx = 0.2;
-        constraints.weighty = 0.3;
-        add(controlPanel, constraints);
+        addComponentToColumn(leftPanel,0,0, 1F, 0.7F,labResultsPanel);
+        addComponentToColumn(leftPanel,0,1, 1F, 0.3F,controlPanel);
+        addComponentToColumn(centerPanel,0,0, 1F, 1F,labParameterPanel);
 
-        //Segunda columna
-        constraints.gridx = 1;
-        constraints.gridy = 0;  // Fila 1
-        constraints.weightx = 0.2;
-        constraints.weighty = 1.0;
-        constraints.fill = GridBagConstraints.BOTH;
-        add(labParameterPanel, constraints);
-
-        //Tercera columna
-        constraints.gridx = 2;
-        constraints.gridy = 0; //Fila 1
-        constraints.weightx = 0.6;
-        constraints.weighty = 0.2;
-        constraints.fill = GridBagConstraints.BOTH;
-        add(productPanel, constraints);
-
-        constraints.gridx = 2;
-        constraints.gridy = 1;  // Fila 2
-        constraints.weightx = 0.6;
-        constraints.weighty = 0.4;
+        addComponentToColumn(rightPanel,0,0, 1F, 0.2F,productPanel);
         JScrollPane scrollPaneConsumer = new JScrollPane(consumersPanel);
         scrollPaneConsumer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPaneConsumer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        constraints.fill = GridBagConstraints.BOTH;
-        add(scrollPaneConsumer, constraints);
-
-        constraints.gridx = 2;
-        constraints.gridy = 2;  // Fila 3
-        constraints.weightx = 0.6;
-        constraints.weighty = 0.4;
+        addComponentToColumn(rightPanel,0,1,1F,0.4F,scrollPaneConsumer);
         JScrollPane scrollPaneProducer = new JScrollPane(producersPanel);
         scrollPaneProducer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPaneProducer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        constraints.fill = GridBagConstraints.BOTH;
-        add(scrollPaneProducer, constraints);
+        addComponentToColumn(rightPanel,0,2,1F,0.4F,scrollPaneProducer);
 
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 0.2;
+        constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
+        panel.add(leftPanel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.weightx = 0.6;
+        constraints.weighty = 1.0;
+        panel.add(centerPanel, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.weightx = 0.2;
+        constraints.weighty = 1.0;
+        panel.add(rightPanel, constraints);
+    }
+
+    private void addComponentToColumn(JPanel column, int gridX, int gridY, float weightX, float weightY, Component component){
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = gridX;
+        constraints.gridy = gridY;
+        constraints.weightx = weightX;
+        constraints.weighty = weightY;
+
+        column.add(component, constraints);
     }
 
     private void confButtonFunc(){
