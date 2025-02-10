@@ -53,19 +53,14 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         JPanel centerPanel = new JPanel(new GridBagLayout());
         JPanel rightPanel = new JPanel(new GridBagLayout());
 
-        addComponentToColumn(leftPanel,0,0, 1F, 0.7F,labResultsPanel);
+        addComponentToColumn(leftPanel,0,0, 1F, 0.7F,labParameterPanel);
         addComponentToColumn(leftPanel,0,1, 1F, 0.3F,controlPanel);
-        addComponentToColumn(centerPanel,0,0, 1F, 1F,labParameterPanel);
 
-        addComponentToColumn(rightPanel,0,0, 1F, 0.2F,productPanel);
-        JScrollPane scrollPaneConsumer = new JScrollPane(consumersPanel);
-        scrollPaneConsumer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPaneConsumer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        addComponentToColumn(rightPanel,0,1,1F,0.4F,scrollPaneConsumer);
-        JScrollPane scrollPaneProducer = new JScrollPane(producersPanel);
-        scrollPaneProducer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPaneProducer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        addComponentToColumn(rightPanel,0,2,1F,0.4F,scrollPaneProducer);
+        addComponentToColumn(centerPanel,0,0, 1F, 1F,labResultsPanel);
+
+        addComponentToColumn(rightPanel,0,0, 1F, 0.3F,productPanel);
+        addComponentToColumn(rightPanel,0,1,1F,0.3F,consumersPanel);
+        addComponentToColumn(rightPanel,0,2,1F,0.3F,producersPanel);
 
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -76,14 +71,16 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
 
         constraints.gridx = 1;
         constraints.gridy = 0;
-        constraints.weightx = 0.6;
+        constraints.weightx = 0.2;
         constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
         panel.add(centerPanel, constraints);
 
         constraints.gridx = 2;
         constraints.gridy = 0;
-        constraints.weightx = 0.2;
+        constraints.weightx = 0.6;
         constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
         panel.add(rightPanel, constraints);
     }
 
@@ -93,6 +90,8 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         constraints.gridy = gridY;
         constraints.weightx = weightX;
         constraints.weighty = weightY;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.insets = new Insets(5, 5, 5, 5);
 
         column.add(component, constraints);
     }
@@ -147,10 +146,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     private void updateProductPanel(){
         Product product = this.controller.getModel().getProduct();
 
-        this.productPanel.getProductID().setText(String.valueOf(product.getProductID()));
-        this.productPanel.getQuantity().setText(String.valueOf(product.getQuantity()));
-        this.productPanel.getQuantityConsumed().setText(String.valueOf(product.getQuantityConsumed()));
-        this.productPanel.getQuantityProduced().setText(String.valueOf(product.getQuantityProduced()));
+        this.productPanel.addOrUpdateProduct(product);
     }
 
     private void updateConsumersPanel(){
@@ -205,6 +201,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
                 updateLabParameterPanel();
                 this.producersPanel.clearProducers();
                 this.consumersPanel.clearConsumers();
+                this.productPanel.clearProducts();
 
                 this.controlPanel.getStart().setSelected(false);
                 this.controlPanel.getStart().setText("START");
@@ -216,6 +213,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
                 updateLabParameterPanel();
                 this.producersPanel.clearProducers();
                 this.consumersPanel.clearConsumers();
+                this.productPanel.clearProducts();
                 break;
             case "Load Configuration":
                 this.controller.updateLabParameterDTO();

@@ -3,80 +3,57 @@ package thread.lab.viewerPanels;
 import thread.lab.Consumer;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConsumersPanel extends JPanel {
-    private final Map<String, JLabel[]> consumerRows = new HashMap<>();
+    private final JTable table;
+    private final DefaultTableModel model;
+    private final Map<String, Integer> consumerRows;
 
     public ConsumersPanel(){
-        addComponentsToPanel();
-    }
-    private void addComponentsToPanel(){
-        setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.insets = new Insets(5, 5, 5, 5);
+        setLayout(new BorderLayout());
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        add(new JLabel("Consumer ID"), constraints);
-        constraints.gridx = 1;
-        add(new JLabel("Status"), constraints);
-        constraints.gridx = 2;
-        add(new JLabel("Consumption"), constraints);
-        constraints.gridx = 3;
-        add(new JLabel("Processing Time"), constraints);
-        constraints.gridx = 4;
-        add(new JLabel("Start Time"), constraints);
-        constraints.gridx = 5;
-        add(new JLabel("End Time"), constraints);
+        String[] columnNames = {"Consumer ID", "Status", "Consumption", "Processing Time", "Start Time", "End Time"};
+        this.model = new DefaultTableModel(columnNames, 0);
+        this.table = new JTable(model);
+        this.table.setDefaultEditor(Object.class, null);
+        //Scroll
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+        //Hashmaps
+        consumerRows = new HashMap<>();
     }
 
     public void addOrUpdateConsumer(Consumer consumer){
         String consumerID = consumer.getConsumerID();
         if (consumerRows.containsKey(consumerID)){
-            JLabel[] labels = consumerRows.get(consumerID);
-            labels[1].setText(consumer.getStatus());
-            labels[2].setText(String.valueOf(consumer.getConsumption()));
-            labels[3].setText(String.valueOf(consumer.getProcessingTime()));
-            labels[4].setText(String.valueOf(consumer.getStartTime()));
-            labels[5].setText(String.valueOf(consumer.getEndTime()));
+            int row = consumerRows.get(consumerID);
+            model.setValueAt(consumer.getStatus(), row, 1);
+            model.setValueAt(consumer.getConsumption(), row, 2);
+            model.setValueAt(consumer.getProcessingTime(), row, 3);
+            model.setValueAt(consumer.getStartTime(), row, 4);
+            model.setValueAt(consumer.getEndTime(), row, 5);
         } else {
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            constraints.insets = new Insets(5, 5, 5, 5);
-            constraints.gridy = consumerRows.size() + 1;
-
-            JLabel[] labels = new JLabel[]{
-                    new JLabel(consumerID),
-                    new JLabel(consumer.getStatus()),
-                    new JLabel(String.valueOf(consumer.getConsumption())),
-                    new JLabel(String.valueOf(consumer.getProcessingTime())),
-                    new JLabel(String.valueOf(consumer.getStartTime())),
-                    new JLabel(String.valueOf(consumer.getEndTime()))
+            Object[] rowData = {
+                    consumerID,
+                    consumer.getStatus(),
+                    consumer.getConsumption(),
+                    consumer.getProcessingTime(),
+                    consumer.getStartTime(),
+                    consumer.getEndTime()
             };
-
-            for (int i = 0; i < labels.length; i++) {
-                constraints.gridx = i;
-                add(labels[i], constraints);
-            }
-
-            consumerRows.put(consumerID, labels);
-
-            revalidate();
-            repaint();
+            model.addRow(rowData);
+            consumerRows.put(consumerID, model.getRowCount() - 1);
         }
     }
 
 
 
     public void clearConsumers(){
-        consumerRows.clear();
-        removeAll();
-        addComponentsToPanel();
-
-        revalidate();
+        this.model.setRowCount(0);
+        this.consumerRows.clear();
     }
 }

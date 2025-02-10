@@ -11,28 +11,38 @@ public class Product {
     private TJTLModel model;
     private String productID;
     private Integer quantity;
+    private Integer maxQuantity;
+    private Integer minQuantity;
+    private Integer quantityConsumed;
+    private Integer quantityProduced;
+    private Integer underflow;
+    private Integer overflow;
+    private String state;
+
     private boolean isSynchronized;
     private boolean isPreventingNegativeStock;
 
-    private Integer quantityConsumed;
-    private Integer quantityProduced;
-
-    public Product(TJTLModel model, String productID){
+    public Product(TJTLModel model, String productID) {
         this.model = model;
         this.productID = productID;
         quantityRandomGenerator();
-        this.isSynchronized = this.model.getController().getLabParameter().isSynchronized();
-        this.isPreventingNegativeStock = this.model.getController().getLabParameter().isPreventingNegativeStock();
-
+        this.maxQuantity = this.model.getController().getLabParameter().getProductMaxQuantity();
+        this.minQuantity = this.model.getController().getLabParameter().getProductMinQuantity();
         this.quantityConsumed = 0;
         this.quantityProduced = 0;
+        this.underflow = 0;
+        this.overflow = 0;
+        this.state = "Disponible";
+
+        this.isSynchronized = this.model.getController().getLabParameter().isSynchronized();
+        this.isPreventingNegativeStock = this.model.getController().getLabParameter().isPreventingNegativeStock();
     }
 
-    private void quantityRandomGenerator(){
+    private void quantityRandomGenerator() {
         Integer min = this.model.getController().getLabParameter().getProductMinQuantity();
         Integer max = this.model.getController().getLabParameter().getProductMaxQuantity();
-        if (min > max){
-            System.out.println("El valor minimo en mayor al maximo");
+        if (min > max) {
+            System.out.println("El valor mínimo es mayor que el máximo.");
         }
         Random random = new Random();
         this.quantity = random.nextInt(max - min + 1) + min;
@@ -41,19 +51,26 @@ public class Product {
     public void increaseQuantity() {
         if (isSynchronized) {
             synchronized (this) {
+                state = "En proceso";
                 quantity++;
                 quantityProduced++;
+                checkOverflow();
+                updateState();
                 notify();
             }
         } else {
+            state = "En proceso";
             quantity++;
             quantityProduced++;
+            checkOverflow();
+            updateState();
         }
     }
 
     public void decreaseQuantity() {
         if (isSynchronized) {
             synchronized (this) {
+                state = "En proceso";
                 while (isPreventingNegativeStock && quantity <= 0) {
                     try {
                         wait();
@@ -64,13 +81,44 @@ public class Product {
                 }
                 quantity--;
                 quantityConsumed++;
+                checkUnderflow();
+                updateState();
             }
         } else {
+            state = "En proceso";
             if (isPreventingNegativeStock && quantity <= 0) {
                 return;
             }
             quantity--;
             quantityConsumed++;
+            checkUnderflow();
+            updateState();
+        }
+    }
+
+    private void checkOverflow() {
+        if (quantity > maxQuantity) {
+            overflow += (quantity - maxQuantity);
+            state = "Overflow";
+        }
+    }
+
+    private void checkUnderflow() {
+        if (quantity < minQuantity) {
+            underflow += (minQuantity - quantity);
+            state = "Underflow";
+        }
+    }
+
+    private void updateState() {
+        if (quantity > maxQuantity) {
+            state = "Overflow";
+        } else if (quantity < minQuantity) {
+            state = "Underflow";
+        } else if (quantity > 0) {
+            state = "Disponible";
+        } else if (!isPreventingNegativeStock && quantity == 0) {
+            state = "Finalizado";
         }
     }
 }
