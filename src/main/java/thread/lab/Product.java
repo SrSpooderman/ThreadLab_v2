@@ -3,6 +3,8 @@ package thread.lab;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Random;
+
 @Getter
 @Setter
 public class Product {
@@ -18,12 +20,22 @@ public class Product {
     public Product(TJTLModel model, String productID){
         this.model = model;
         this.productID = productID;
-        this.quantity = 0;
+        quantityRandomGenerator();
         this.isSynchronized = this.model.getController().getLabParameter().isSynchronized();
         this.isPreventingNegativeStock = this.model.getController().getLabParameter().isPreventingNegativeStock();
 
         this.quantityConsumed = 0;
         this.quantityProduced = 0;
+    }
+
+    private void quantityRandomGenerator(){
+        Integer min = this.model.getController().getLabParameter().getProductMinQuantity();
+        Integer max = this.model.getController().getLabParameter().getProductMaxQuantity();
+        if (min > max){
+            System.out.println("El valor minimo en mayor al maximo");
+        }
+        Random random = new Random();
+        this.quantity = random.nextInt(max - min + 1) + min;
     }
 
     public void increaseQuantity() {

@@ -105,20 +105,33 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     }
 
     private void updateLabParameterPanel(){
+        // Resource Settings
+        this.labParameterPanel.getProductMaxQuantity().setValue(this.controller.getLabParameter().getProductMaxQuantity());
+        this.labParameterPanel.getProductMinQuantity().setValue(this.controller.getLabParameter().getProductMinQuantity());
+
+        // Producer/Consumer Count
+        this.labParameterPanel.getNumberProducers().setValue(this.controller.getLabParameter().getNumberProducers());
+        this.labParameterPanel.getNumberConsumers().setValue(this.controller.getLabParameter().getNumberConsumers());
+
+        // Start Delay Settings
+        this.labParameterPanel.getStartDelayMax().setValue(this.controller.getLabParameter().getStartDelayMax());
+        this.labParameterPanel.getStartDelayMin().setValue(this.controller.getLabParameter().getStartDelayMin());
+
+        // Producer Timing
+        this.labParameterPanel.getProduceMaxTime().setValue(this.controller.getLabParameter().getProduceMaxTime());
+        this.labParameterPanel.getProduceMinTime().setValue(this.controller.getLabParameter().getProduceMinTime());
+
+        // Consumer Timing
+        this.labParameterPanel.getConsumeMaxTime().setValue(this.controller.getLabParameter().getConsumeMaxTime());
+        this.labParameterPanel.getConsumeMinTime().setValue(this.controller.getLabParameter().getConsumeMinTime());
+
+        // Lifecycle
+        this.labParameterPanel.getProducerItemQuantity().setValue(this.controller.getLabParameter().getProducerItemQuantity());
+        this.labParameterPanel.getConsumerItemQuantity().setValue(this.controller.getLabParameter().getConsumerItemQuantity());
+
+        // Operation Settings
         this.labParameterPanel.getIsSynchronized().setSelected(this.controller.getLabParameter().isSynchronized());
         this.labParameterPanel.getIsPreventingNegativeStock().setSelected(this.controller.getLabParameter().isPreventingNegativeStock());
-
-        this.labParameterPanel.getNumberProducers().setValue((Integer)this.controller.getLabParameter().getNumberProducers());
-        this.labParameterPanel.getProducerItemQuantity().setValue((Integer)this.controller.getLabParameter().getProducerItemQuantity());
-
-        this.labParameterPanel.getNumberConsumers().setValue((Integer)this.controller.getLabParameter().getNumberConsumers());
-        this.labParameterPanel.getConsumerItemQuantity().setValue((Integer)this.controller.getLabParameter().getConsumerItemQuantity());
-
-        this.labParameterPanel.getIsEnableProducerMaxTime().setSelected(this.controller.getLabParameter().isEnableProducerMaxTime());
-        this.labParameterPanel.getProducerDelayMax().setValue((Integer)this.controller.getLabParameter().getProducerDelayMax());
-
-        this.labParameterPanel.getIsEnableConsumerMaxTime().setSelected(this.controller.getLabParameter().isEnableConsumerMaxTime());
-        this.labParameterPanel.getConsumerDelayMax().setValue((Integer)this.controller.getLabParameter().getConsumerDelayMax());
     }
 
     private void updateResults(){

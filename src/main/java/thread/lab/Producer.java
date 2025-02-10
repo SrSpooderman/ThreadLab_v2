@@ -3,6 +3,8 @@ package thread.lab;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Random;
+
 @Getter
 @Setter
 public class Producer implements Runnable {
@@ -27,27 +29,22 @@ public class Producer implements Runnable {
             status = "Esperando para iniciar";
 
             int itemQuantity = model.getController().getLabParameter().getProducerItemQuantity();
-            boolean enableProducerMaxTime = model.getController().getLabParameter().isEnableProducerMaxTime();
-            int producerDelayMax = model.getController().getLabParameter().getProducerDelayMax();
 
             status = "Produciendo";
             for (int i = 0; i < itemQuantity; i++) {
-                //Cerrado de hilo
+                //Cerrado de hilo y pausa de hilo
                 if (this.model.getController().getLabParameter().isStopRequest()){
                     return;
                 }
-
                 while (!model.getController().getLabParameter().isRunning()) {
-                    if (enableProducerMaxTime && (System.currentTimeMillis() - startTime >= producerDelayMax)) {
-                        status = "Finalizado (Tiempo excedido)";
-                        endTime = System.currentTimeMillis();
-                        processingTime = endTime - startTime;
+                    Thread.sleep(100);
+                    if (this.model.getController().getLabParameter().isStopRequest()){
                         return;
                     }
-                    Thread.sleep(100);
                 }
                 model.getProduct().increaseQuantity();
                 production++;
+                Thread.sleep(randomProducerDelay());
             }
             status = "Finalizado";
             this.model.increaseFinalizedProducerQuantity();
@@ -58,5 +55,15 @@ public class Producer implements Runnable {
             Thread.currentThread().interrupt();
             status = "Interrumpido";
         }
+    }
+
+    private Integer randomProducerDelay(){
+        Integer min = this.model.getController().getLabParameter().getProduceMinTime();
+        Integer max = this.model.getController().getLabParameter().getProduceMaxTime();
+        if (min > max){
+            System.out.println("El valor minimo en mayor al maximo");
+        }
+        Random random = new Random();
+        return random.nextInt(max - min + 1) + min;
     }
 }

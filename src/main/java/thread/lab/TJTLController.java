@@ -39,19 +39,33 @@ public class TJTLController {
     }
 
     public void updateLabParameterDTO(){
+        // Resource Settings
+        this.labParameter.setProductMaxQuantity((Integer) this.viewer.getLabParameterPanel().getProductMaxQuantity().getValue());
+        this.labParameter.setProductMinQuantity((Integer) this.viewer.getLabParameterPanel().getProductMinQuantity().getValue());
+
+        // Producer/Consumer Count
+        this.labParameter.setNumberProducers((Integer) this.viewer.getLabParameterPanel().getNumberProducers().getValue());
+        this.labParameter.setNumberConsumers((Integer) this.viewer.getLabParameterPanel().getNumberConsumers().getValue());
+
+        // Start Delay Settings
+        this.labParameter.setStartDelayMax((Integer) this.viewer.getLabParameterPanel().getStartDelayMax().getValue());
+        this.labParameter.setStartDelayMin((Integer) this.viewer.getLabParameterPanel().getStartDelayMin().getValue());
+
+        // Producer Timing
+        this.labParameter.setProduceMaxTime((Integer) this.viewer.getLabParameterPanel().getProduceMaxTime().getValue());
+        this.labParameter.setProduceMinTime((Integer) this.viewer.getLabParameterPanel().getProduceMinTime().getValue());
+
+        // Consumer Timing
+        this.labParameter.setConsumeMaxTime((Integer) this.viewer.getLabParameterPanel().getConsumeMaxTime().getValue());
+        this.labParameter.setConsumeMinTime((Integer) this.viewer.getLabParameterPanel().getConsumeMinTime().getValue());
+
+        // Lifecycle
+        this.labParameter.setProducerItemQuantity((Integer) this.viewer.getLabParameterPanel().getProducerItemQuantity().getValue());
+        this.labParameter.setConsumerItemQuantity((Integer) this.viewer.getLabParameterPanel().getConsumerItemQuantity().getValue());
+
+        // Operation Settings
         this.labParameter.setSynchronized(this.viewer.getLabParameterPanel().getIsSynchronized().isSelected());
         this.labParameter.setPreventingNegativeStock(this.viewer.getLabParameterPanel().getIsPreventingNegativeStock().isSelected());
-
-        this.labParameter.setNumberProducers((Integer)this.viewer.getLabParameterPanel().getNumberProducers ().getValue());
-        this.labParameter.setProducerItemQuantity((Integer)this.viewer.getLabParameterPanel().getProducerItemQuantity ().getValue());
-        this.labParameter.setNumberConsumers((Integer)this.viewer.getLabParameterPanel().getNumberConsumers ().getValue());
-        this.labParameter.setConsumerItemQuantity((Integer)this.viewer.getLabParameterPanel().getConsumerItemQuantity ().getValue());
-
-        this.labParameter.setEnableProducerMaxTime(this.viewer.getLabParameterPanel().getIsEnableProducerMaxTime().isSelected());
-        this.labParameter.setProducerDelayMax((Integer)this.viewer.getLabParameterPanel().getProducerDelayMax().getValue());
-
-        this.labParameter.setEnableConsumerMaxTime(this.viewer.getLabParameterPanel().getIsEnableConsumerMaxTime().isSelected());
-        this.labParameter.setConsumerDelayMax((Integer)this.viewer.getLabParameterPanel().getConsumerDelayMax().getValue());
 
         System.out.println(this.labParameter.toString());
     }

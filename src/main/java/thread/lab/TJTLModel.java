@@ -6,6 +6,7 @@ import thread.lab.dto.DTOLabParameter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Getter
 @Setter
@@ -59,7 +60,7 @@ public class TJTLModel {
             Thread producerThread = new Thread(producer);
             producerThread.start();
             try{
-                Thread.sleep(100);
+                Thread.sleep(randomStartDelay());
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
@@ -80,13 +81,23 @@ public class TJTLModel {
             Thread consumerThread = new Thread(consumer);
             consumerThread.start();
             try{
-                Thread.sleep(100);
+                Thread.sleep(randomStartDelay());
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
             }
         }
 
+    }
+
+    private Integer randomStartDelay(){
+        Integer min = this.controller.getLabParameter().getStartDelayMin();
+        Integer max = this.controller.getLabParameter().getStartDelayMax();
+        if (min > max){
+            System.out.println("El valor minimo en mayor al maximo");
+        }
+        Random random = new Random();
+        return random.nextInt(max - min + 1) + min;
     }
 
     public void increaseFinalizedConsumerQuantity(){

@@ -3,6 +3,8 @@ package thread.lab;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Random;
+
 @Getter
 @Setter
 public class Consumer implements Runnable {
@@ -27,27 +29,22 @@ public class Consumer implements Runnable {
             status = "Esperando para consumir";
 
             int itemQuantity = model.getController().getLabParameter().getConsumerItemQuantity();
-            boolean enableConsumerMaxTime = model.getController().getLabParameter().isEnableConsumerMaxTime();
-            int consumerDelayMax = model.getController().getLabParameter().getConsumerDelayMax();
 
             status = "Consumiendo";
             for (int i = 0; i < itemQuantity; i++) {
-                //Cerrado de hilo
+                //Cerrado y pausado de hilo
                 if (this.model.getController().getLabParameter().isStopRequest()){
                     return;
                 }
-
                 while (!model.getController().getLabParameter().isRunning()) {
-                    if (enableConsumerMaxTime && (System.currentTimeMillis() - startTime >= consumerDelayMax)) {
-                        status = "Finalizado (Tiempo excedido)";
-                        endTime = System.currentTimeMillis();
-                        processingTime = endTime - startTime;
+                    Thread.sleep(100);
+                    if (this.model.getController().getLabParameter().isStopRequest()){
                         return;
                     }
-                    Thread.sleep(100);
                 }
                 this.model.getProduct().decreaseQuantity();
                 consumption++;
+                Thread.sleep(randomConsumerDelay());
             }
             status = "Finalizado";
             this.model.increaseFinalizedConsumerQuantity();
@@ -58,5 +55,15 @@ public class Consumer implements Runnable {
             Thread.currentThread().interrupt();
             status = "Interrumpido";
         }
+    }
+
+    private Integer randomConsumerDelay(){
+        Integer min = this.model.getController().getLabParameter().getConsumeMinTime();
+        Integer max = this.model.getController().getLabParameter().getConsumeMaxTime();
+        if (min > max){
+            System.out.println("El valor minimo en mayor al maximo");
+        }
+        Random random = new Random();
+        return random.nextInt(max - min + 1) + min;
     }
 }

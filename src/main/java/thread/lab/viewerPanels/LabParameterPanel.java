@@ -1,42 +1,56 @@
 package thread.lab.viewerPanels;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
 
 @Getter
+@Setter
 public class LabParameterPanel extends JPanel {
+    private JSpinner productMaxQuantity;
+    private JSpinner productMinQuantity;
+
+    private JSpinner numberProducers;
+    private JSpinner numberConsumers;
+
+    private JSpinner startDelayMax;
+    private JSpinner startDelayMin;
+
+    private JSpinner produceMaxTime;
+    private JSpinner produceMinTime;
+
+    private JSpinner consumeMaxTime;
+    private JSpinner consumeMinTime;
+
+    private JSpinner producerItemQuantity;
+    private JSpinner consumerItemQuantity;
+
     private JCheckBox isSynchronized;
     private JCheckBox isPreventingNegativeStock;
 
-    private JSpinner numberProducers;
-    private JSpinner producerItemQuantity;
-
-    private JSpinner numberConsumers;
-    private JSpinner consumerItemQuantity;
-
-    private JCheckBox isEnableProducerMaxTime;
-    private JSpinner producerDelayMax;
-
-    private JCheckBox isEnableConsumerMaxTime;
-    private JSpinner consumerDelayMax;
-
     public LabParameterPanel(){
-        this.isSynchronized = new JCheckBox("Synchronized");
-        this.isPreventingNegativeStock = new JCheckBox("Prevent Negative Stock");
+        this.productMaxQuantity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        this.productMinQuantity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
-        this.numberProducers = new JSpinner(new SpinnerNumberModel(1, 1, null, 1));
-        this.producerItemQuantity = new JSpinner(new SpinnerNumberModel(1, 1, null, 1));
+        this.numberProducers = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        this.numberConsumers = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
-        this.numberConsumers = new JSpinner(new SpinnerNumberModel(1, 1, null, 1));
-        this.consumerItemQuantity = new JSpinner(new SpinnerNumberModel(1, 1, null, 1));
+        this.startDelayMax = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        this.startDelayMin = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
-        this.isEnableProducerMaxTime = new JCheckBox("Enable Producer Max Time");
-        this.producerDelayMax = new JSpinner(new SpinnerNumberModel(1, 0, null, 1));
+        this.produceMaxTime = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        this.produceMinTime = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
-        this.isEnableConsumerMaxTime = new JCheckBox("Enable Consumer Max Time");
-        this.consumerDelayMax = new JSpinner(new SpinnerNumberModel(1, 0, null, 1));
+        this.consumeMaxTime = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        this.consumeMinTime = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+
+        this.producerItemQuantity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        this.consumerItemQuantity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+
+        this.isSynchronized = new JCheckBox();
+        this.isPreventingNegativeStock = new JCheckBox();
 
         addComponentsToPanel();
     }
@@ -47,84 +61,154 @@ public class LabParameterPanel extends JPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.insets = new Insets(5, 5, 5, 5);
 
-        // Synchronized
+        //Fuentes
+        Font sectionFont = new Font("Arial", Font.BOLD, 14);
+
         constraints.gridx = 0;
         constraints.gridy = 0;
-        add(new JLabel("Synchronized"), constraints);
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        JLabel resourceLabel = new JLabel("Resource Settings");
+        resourceLabel.setFont(sectionFont);
+        add(resourceLabel, constraints);
 
+        constraints.gridwidth = 1;
+        constraints.gridy++;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Product Max Quantity:"), constraints);
         constraints.gridx = 1;
-        add(isSynchronized, constraints);
+        add(productMaxQuantity, constraints);
 
-        // Prevent Negative Stock
         constraints.gridx = 0;
-        constraints.gridy = 1;
-        add(new JLabel("Prevent Negative Stock"), constraints);
-
+        constraints.gridy++;
+        add(new JLabel("Product Min Quantity:"), constraints);
         constraints.gridx = 1;
-        add(isPreventingNegativeStock, constraints);
+        add(productMinQuantity, constraints);
 
-        // Number of Producers
         constraints.gridx = 0;
-        constraints.gridy = 2;
-        add(new JLabel("Number of Producers"), constraints);
+        constraints.gridy++;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        JLabel producerConsumerLabel = new JLabel("Producer/Consumer Count");
+        producerConsumerLabel.setFont(sectionFont);
+        add(producerConsumerLabel, constraints);
 
+        constraints.gridwidth = 1;
+        constraints.gridy++;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Number of Producers:"), constraints);
         constraints.gridx = 1;
         add(numberProducers, constraints);
 
-        // Producer Item Quantity
         constraints.gridx = 0;
-        constraints.gridy = 3;
-        add(new JLabel("Producer Item Quantity"), constraints);
-
-        constraints.gridx = 1;
-        add(producerItemQuantity, constraints);
-
-        // Number of Consumers
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        add(new JLabel("Number of Consumers"), constraints);
-
+        constraints.gridy++;
+        add(new JLabel("Number of Consumers:"), constraints);
         constraints.gridx = 1;
         add(numberConsumers, constraints);
 
-        // Consumer Item Quantity
         constraints.gridx = 0;
-        constraints.gridy = 5;
-        add(new JLabel("Consumer Item Quantity"), constraints);
+        constraints.gridy++;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        JLabel startDelayLabel = new JLabel("Start Delay Settings");
+        startDelayLabel.setFont(sectionFont);
+        add(startDelayLabel, constraints);
 
+        constraints.gridwidth = 1;
+        constraints.gridy++;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Start Delay Max:"), constraints);
+        constraints.gridx = 1;
+        add(startDelayMax, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy++;
+        add(new JLabel("Start Delay Min:"), constraints);
+        constraints.gridx = 1;
+        add(startDelayMin, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy++;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        JLabel producerTimingLabel = new JLabel("Producer Timing");
+        producerTimingLabel.setFont(sectionFont);
+        add(producerTimingLabel, constraints);
+
+        constraints.gridwidth = 1;
+        constraints.gridy++;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Produce Max Time:"), constraints);
+        constraints.gridx = 1;
+        add(produceMaxTime, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy++;
+        add(new JLabel("Produce Min Time:"), constraints);
+        constraints.gridx = 1;
+        add(produceMinTime, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy++;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        JLabel consumerTimingLabel = new JLabel("Consumer Timing");
+        consumerTimingLabel.setFont(sectionFont);
+        add(consumerTimingLabel, constraints);
+
+        constraints.gridwidth = 1;
+        constraints.gridy++;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Consume Max Time:"), constraints);
+        constraints.gridx = 1;
+        add(consumeMaxTime, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy++;
+        add(new JLabel("Consume Min Time:"), constraints);
+        constraints.gridx = 1;
+        add(consumeMinTime, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy++;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        JLabel lifecycleLabel = new JLabel("Lifecycle");
+        lifecycleLabel.setFont(sectionFont);
+        add(lifecycleLabel, constraints);
+
+        constraints.gridwidth = 1;
+        constraints.gridy++;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Producer Item Quantity:"), constraints);
+        constraints.gridx = 1;
+        add(producerItemQuantity, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy++;
+        add(new JLabel("Consumer Item Quantity:"), constraints);
         constraints.gridx = 1;
         add(consumerItemQuantity, constraints);
 
-        // Enable Producer Max Time
         constraints.gridx = 0;
-        constraints.gridy = 6;
-        add(new JLabel("Enable Producer Max Time"), constraints);
+        constraints.gridy++;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        JLabel operationLabel = new JLabel("Operation Settings");
+        operationLabel.setFont(sectionFont);
+        add(operationLabel, constraints);
 
+        constraints.gridwidth = 1;
+        constraints.gridy++;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Synchronized:"), constraints);
         constraints.gridx = 1;
-        add(isEnableProducerMaxTime, constraints);
+        add(isSynchronized, constraints);
 
-        // Producer Delay Max
         constraints.gridx = 0;
-        constraints.gridy = 7;
-        add(new JLabel("Producer Delay Max"), constraints);
-
+        constraints.gridy++;
+        add(new JLabel("Prevent Negative Stock:"), constraints);
         constraints.gridx = 1;
-        add(producerDelayMax, constraints);
-
-        // Enable Consumer Max Time
-        constraints.gridx = 0;
-        constraints.gridy = 8;
-        add(new JLabel("Enable Consumer Max Time"), constraints);
-
-        constraints.gridx = 1;
-        add(isEnableConsumerMaxTime, constraints);
-
-        // Consumer Delay Max
-        constraints.gridx = 0;
-        constraints.gridy = 9;
-        add(new JLabel("Consumer Delay Max"), constraints);
-
-        constraints.gridx = 1;
-        add(consumerDelayMax, constraints);
+        add(isPreventingNegativeStock, constraints);
     }
 }

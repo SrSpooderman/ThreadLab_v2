@@ -6,21 +6,26 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DTOLabParameter {
-    private boolean isSynchronized;
-    private boolean isPreventingNegativeStock;
+    private Integer productMaxQuantity;
+    private Integer productMinQuantity;
 
     private Integer numberProducers;
-    private Integer producerItemQuantity;
-
-
     private Integer numberConsumers;
+
+    private Integer startDelayMax;
+    private Integer startDelayMin;
+
+    private Integer produceMaxTime;
+    private Integer produceMinTime;
+
+    private Integer consumeMaxTime;
+    private Integer consumeMinTime;
+
+    private Integer producerItemQuantity;
     private Integer consumerItemQuantity;
 
-    private boolean isEnableProducerMaxTime;
-    private Integer producerDelayMax;
-
-    private boolean isEnableConsumerMaxTime;
-    private Integer consumerDelayMax;
+    private boolean isSynchronized;
+    private boolean isPreventingNegativeStock;
 
     private boolean isRunning;
     private boolean stopRequest;
@@ -30,20 +35,26 @@ public class DTOLabParameter {
     }
 
     public void resetData(){
-        this.isSynchronized = false;
-        this.isPreventingNegativeStock = false;
+        this.productMaxQuantity = 1;
+        this.productMinQuantity = 1;
 
         this.numberProducers = 1;
-        this.producerItemQuantity = 1;
-
         this.numberConsumers = 1;
+
+        this.startDelayMax = 1;
+        this.startDelayMin = 1;
+
+        this.produceMaxTime = 1;
+        this.produceMinTime = 1;
+
+        this.consumeMaxTime = 1;
+        this.consumeMinTime = 1;
+
+        this.producerItemQuantity = 1;
         this.consumerItemQuantity = 1;
 
-        this.isEnableProducerMaxTime = false;
-        this.producerDelayMax = 1;
-
-        this.isEnableConsumerMaxTime = false;
-        this.consumerDelayMax = 1;
+        this.isSynchronized = false;
+        this.isPreventingNegativeStock = false;
 
         this.isRunning = true;
         this.stopRequest = false;
@@ -52,18 +63,22 @@ public class DTOLabParameter {
     @Override
     public String toString() {
         return "DTOLabParameter{" +
-                "isSynchronized=" + isSynchronized +
-                ", isPreventingNegativeStock=" + isPreventingNegativeStock +
+                "productMaxQuantity=" + productMaxQuantity +
+                ", productMinQuantity=" + productMinQuantity +
                 ", numberProducers=" + numberProducers +
-                ", producerItemQuantity=" + producerItemQuantity +
                 ", numberConsumers=" + numberConsumers +
+                ", startDelayMax=" + startDelayMax +
+                ", startDelayMin=" + startDelayMin +
+                ", produceMaxTime=" + produceMaxTime +
+                ", produceMinTime=" + produceMinTime +
+                ", consumeMaxTime=" + consumeMaxTime +
+                ", consumeMinTime=" + consumeMinTime +
+                ", producerItemQuantity=" + producerItemQuantity +
                 ", consumerItemQuantity=" + consumerItemQuantity +
-                ", isEnableProducerMaxTime=" + isEnableProducerMaxTime +
-                ", producerDelayMax=" + producerDelayMax +
-                ", isEnableConsumerMaxTime=" + isEnableConsumerMaxTime +
-                ", consumerDelayMax=" + consumerDelayMax +
+                ", isSynchronized=" + isSynchronized +
+                ", isPreventingNegativeStock=" + isPreventingNegativeStock +
                 ", isRunning=" + isRunning +
-                ", isStopRequest=" + stopRequest +
+                ", stopRequest=" + stopRequest +
                 '}';
     }
 }
