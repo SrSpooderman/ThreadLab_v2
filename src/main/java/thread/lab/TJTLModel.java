@@ -44,7 +44,7 @@ public class TJTLModel {
         this.producers = new ArrayList<>();
         this.consumers = new ArrayList<>();
 
-        this.product = new Product(this, "Producto principal");
+        this.product = new Product(this, "Alpha");
     }
 
     public void runProducers(){
@@ -54,7 +54,7 @@ public class TJTLModel {
             if (this.getController().getLabParameter().isStopRequest()) {
                 return;
             }
-            Producer producer = new Producer(this, "Producer-"+i);
+            Producer producer = new Producer(this, "Producer-"+i, this.product.getProductID());
             producers.add(producer);
 
             Thread producerThread = new Thread(producer);
@@ -75,7 +75,7 @@ public class TJTLModel {
                 return;
             }
 
-            Consumer consumer = new Consumer(this, "Consumer-"+i);
+            Consumer consumer = new Consumer(this, "Consumer-"+i, this.product.getProductID());
             consumers.add(consumer);
 
             Thread consumerThread = new Thread(consumer);

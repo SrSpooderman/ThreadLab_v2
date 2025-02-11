@@ -16,7 +16,7 @@ public class ConsumersPanel extends JPanel {
     public ConsumersPanel(){
         setLayout(new BorderLayout());
 
-        String[] columnNames = {"Consumer ID", "Status", "Consumption", "Processing Time", "Start Time", "End Time"};
+        String[] columnNames = {"Consumer ID", "Resource", "Consume delay", "Status", "Consumption", "Processing Time", "Start Time", "End Time"};
         this.model = new DefaultTableModel(columnNames, 0);
         this.table = new JTable(model);
         this.table.setDefaultEditor(Object.class, null);
@@ -31,11 +31,13 @@ public class ConsumersPanel extends JPanel {
         String consumerID = consumer.getConsumerID();
         if (consumerRows.containsKey(consumerID)){
             int row = consumerRows.get(consumerID);
-            model.setValueAt(consumer.getStatus(), row, 1);
-            model.setValueAt(consumer.getConsumption(), row, 2);
-            model.setValueAt(consumer.getProcessingTime(), row, 3);
-            model.setValueAt(consumer.getStartTime(), row, 4);
-            model.setValueAt(consumer.getEndTime(), row, 5);
+            model.setValueAt(consumer.getResourceBound(),row,1);
+            model.setValueAt(consumer.getConsumeDelay(), row, 2);
+            model.setValueAt(consumer.getStatus(), row, 3);
+            model.setValueAt(consumer.getConsumption(), row, 4);
+            model.setValueAt(consumer.getProcessingTime(), row, 5);
+            model.setValueAt(consumer.getStartTime(), row, 6);
+            model.setValueAt(consumer.getEndTime(), row, 7);
         } else {
             Object[] rowData = {
                     consumerID,

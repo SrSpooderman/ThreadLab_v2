@@ -16,7 +16,7 @@ public class ProducersPanel extends JPanel {
     public ProducersPanel(){
         setLayout(new BorderLayout());
 
-        String[] columnNames = {"Producer ID", "Status", "Production", "Processing Time", "Start Time", "End Time"};
+        String[] columnNames = {"Producer ID", "Resource", "Produce delay", "Status", "Production", "Processing Time", "Start Time", "End Time"};
         this.model = new DefaultTableModel(columnNames, 0);
         this.table = new JTable(model);
         this.table.setDefaultEditor(Object.class, null);
@@ -31,11 +31,13 @@ public class ProducersPanel extends JPanel {
         String producerID = producer.getProducerID();
         if (producerRows.containsKey(producerID)){
             int row = producerRows.get(producerID);
-            model.setValueAt(producer.getStatus(), row, 1);
-            model.setValueAt(producer.getProduction(), row, 2);
-            model.setValueAt(producer.getProcessingTime(), row, 3);
-            model.setValueAt(producer.getStartTime(), row, 4);
-            model.setValueAt(producer.getEndTime(), row, 5);
+            model.setValueAt(producer.getResourceBound(), row, 1);
+            model.setValueAt(producer.getProduceDelay(), row, 2);
+            model.setValueAt(producer.getStatus(), row, 3);
+            model.setValueAt(producer.getProduction(), row, 4);
+            model.setValueAt(producer.getProcessingTime(), row, 5);
+            model.setValueAt(producer.getStartTime(), row, 6);
+            model.setValueAt(producer.getEndTime(), row, 7);
         } else {
             Object[] rowData = {
                     producerID,

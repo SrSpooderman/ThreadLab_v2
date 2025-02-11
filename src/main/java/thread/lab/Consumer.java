@@ -10,15 +10,18 @@ import java.util.Random;
 public class Consumer implements Runnable {
     private TJTLModel model;
     private String consumerID;
+    private String resourceBound;
+    private Integer consumeDelay;
     private String status;
     private Integer consumption;
     private long processingTime;
     private long startTime;
     private long endTime;
 
-    public Consumer(TJTLModel model, String consumerID) {
+    public Consumer(TJTLModel model, String consumerID, String resourceBound) {
         this.model = model;
         this.consumerID = consumerID;
+        this.resourceBound = resourceBound;
         this.consumption = 0;
     }
 
@@ -64,6 +67,8 @@ public class Consumer implements Runnable {
             System.out.println("El valor minimo en mayor al maximo");
         }
         Random random = new Random();
-        return random.nextInt(max - min + 1) + min;
+        Integer result = random.nextInt(max - min + 1) + min;
+        this.consumeDelay = result;
+        return result;
     }
 }
