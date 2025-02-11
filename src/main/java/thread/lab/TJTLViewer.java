@@ -98,8 +98,8 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
 
     private void confButtonFunc(){
         this.controlPanel.getStart().addActionListener(this);
-        this.controlPanel.getStop().addActionListener(this);
-        this.controlPanel.getLoadConfiguration().addActionListener(this);
+        this.controlPanel.getReset().addActionListener(this);
+        this.controlPanel.getPause().addActionListener(this);
         this.controlPanel.getDefaultConfiguration().addActionListener(this);
     }
 
@@ -125,8 +125,8 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         this.labParameterPanel.getConsumeMinTime().setValue(this.controller.getLabParameter().getConsumeMinTime());
 
         // Lifecycle
-        this.labParameterPanel.getProducerItemQuantity().setValue(this.controller.getLabParameter().getProducerItemQuantity());
-        this.labParameterPanel.getConsumerItemQuantity().setValue(this.controller.getLabParameter().getConsumerItemQuantity());
+        this.labParameterPanel.getProducerCycles().setValue(this.controller.getLabParameter().getProducerItemQuantity());
+        this.labParameterPanel.getConsumerCycles().setValue(this.controller.getLabParameter().getConsumerItemQuantity());
 
         // Operation Settings
         this.labParameterPanel.getIsSynchronized().setSelected(this.controller.getLabParameter().isSynchronized());
@@ -172,51 +172,60 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         }
     }
 
+    private void resetProgram(){
+        this.controller.stopAllThreads();
+        this.controller.getLabParameter().setStopRequest(false);
+        this.controller.getLabParameter().setRunning(true);
+        this.controller.getModel().resetVariables();
+
+        updateLabParameterPanel();
+
+        this.producersPanel.clearProducers();
+        this.consumersPanel.clearConsumers();
+        this.productPanel.clearProducts();
+    }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent){
         String actionCommand = actionEvent.getActionCommand();
 
         switch (actionCommand){
             case "START":
+                this.controller.updateLabParameterDTO();
+                resetProgram();
+                this.controller.startModel();
+                break;
+            case "PAUSE":
+                if (this.controller.getLabParameter().isRunning()){
+                    this.controller.getLabParameter().setRunning(false);
+                } else {
+                    System.out.println("Sistema ya pausado");
+                }
+                this.controlPanel.getPause().setText("CONTINUE");
+                this.controlPanel.getStart().setSelected(true);
+                break;
+
+            case "CONTINUE":
                 if (!this.controller.getLabParameter().isRunning()){
                     this.controller.getLabParameter().setRunning(true);
                 }else {
-                    this.controller.startModel();
+                    System.out.println("Sistema ya en ejecucion");
                 }
-
-                this.controlPanel.getStart().setText("PAUSE");
-                this.controlPanel.getStart().setSelected(true);
+                this.controlPanel.getPause().setText("PAUSE");
+                this.controlPanel.getStart().setSelected(false);
                 break;
-            case "PAUSE":
-                this.controller.getLabParameter().setRunning(false);
+            case "RESET":
+                resetProgram();
 
                 this.controlPanel.getStart().setSelected(false);
                 this.controlPanel.getStart().setText("START");
                 break;
-            case "STOP":
-                this.controller.stopAllThreads();
+            case "DEFAULT":
                 this.controller.resetDTO();
-                this.controller.getModel().resetVariables();
-
-                updateLabParameterPanel();
-                this.producersPanel.clearProducers();
-                this.consumersPanel.clearConsumers();
-                this.productPanel.clearProducts();
+                resetProgram();
 
                 this.controlPanel.getStart().setSelected(false);
                 this.controlPanel.getStart().setText("START");
-                break;
-            case "Default Configuration":
-                this.controller.resetDTO();
-                this.controller.getModel().resetVariables();
-                this.controller.stopAllThreads();
-                updateLabParameterPanel();
-                this.producersPanel.clearProducers();
-                this.consumersPanel.clearConsumers();
-                this.productPanel.clearProducts();
-                break;
-            case "Load Configuration":
-                this.controller.updateLabParameterDTO();
                 break;
             default:
                 System.err.println("Acción no tratada: "+actionCommand);

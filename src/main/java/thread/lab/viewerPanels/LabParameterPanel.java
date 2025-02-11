@@ -24,8 +24,8 @@ public class LabParameterPanel extends JPanel {
     private JSpinner consumeMaxTime;
     private JSpinner consumeMinTime;
 
-    private JSpinner producerItemQuantity;
-    private JSpinner consumerItemQuantity;
+    private JSpinner producerCycles;
+    private JSpinner consumerCycles;
 
     private JCheckBox isSynchronized;
     private JCheckBox isPreventingNegativeStock;
@@ -46,8 +46,8 @@ public class LabParameterPanel extends JPanel {
         this.consumeMaxTime = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
         this.consumeMinTime = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
-        this.producerItemQuantity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-        this.consumerItemQuantity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        this.producerCycles = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        this.consumerCycles = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
         this.isSynchronized = new JCheckBox();
         this.isPreventingNegativeStock = new JCheckBox();
@@ -180,15 +180,15 @@ public class LabParameterPanel extends JPanel {
         constraints.gridwidth = 1;
         constraints.gridy++;
         constraints.anchor = GridBagConstraints.WEST;
-        add(new JLabel("Producer Item Quantity:"), constraints);
+        add(new JLabel("Producer Cycles:"), constraints);
         constraints.gridx = 1;
-        add(producerItemQuantity, constraints);
+        add(producerCycles, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Consumer Item Quantity:"), constraints);
+        add(new JLabel("Consumer Cycles:"), constraints);
         constraints.gridx = 1;
-        add(consumerItemQuantity, constraints);
+        add(consumerCycles, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;

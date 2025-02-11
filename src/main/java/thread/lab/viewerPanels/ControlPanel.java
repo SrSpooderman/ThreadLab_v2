@@ -7,16 +7,16 @@ import java.awt.*;
 
 @Getter
 public class ControlPanel extends JPanel {
-    private JToggleButton start;
-    private JButton stop;
-    private JButton loadConfiguration;
+    private JButton start;
+    private JButton reset;
+    private JToggleButton pause ;
     private JButton defaultConfiguration;
 
     public ControlPanel(){
-        this.start = new JToggleButton("START");
-        this.stop = new JButton("STOP");
-        this.loadConfiguration = new JButton("Load Configuration");
-        this.defaultConfiguration = new JButton("Default Configuration");
+        this.start = new JButton("START");
+        this.reset = new JButton("RESET");
+        this.pause = new JToggleButton("PAUSE");
+        this.defaultConfiguration = new JButton("DEFAULT");
 
         addComponentsToPanel();
     }
@@ -38,16 +38,16 @@ public class ControlPanel extends JPanel {
         // Fila 1, Columna 2
         constraints.gridx = 1;
         constraints.gridy = 0;
-        stop.setBackground(colorBackground);
-        stop.setForeground(colorForeground);
-        add(stop, constraints);
+        reset.setBackground(colorBackground);
+        reset.setForeground(colorForeground);
+        add(reset, constraints);
 
         // Fila 2, Columna 1
         constraints.gridx = 0;
         constraints.gridy = 1;
-        loadConfiguration.setBackground(colorBackground);
-        loadConfiguration.setForeground(colorForeground);
-        add(loadConfiguration, constraints);
+        pause.setBackground(colorBackground);
+        pause.setForeground(colorForeground);
+        add(pause, constraints);
 
         // Fila 2, Columna 2
         constraints.gridx = 1;

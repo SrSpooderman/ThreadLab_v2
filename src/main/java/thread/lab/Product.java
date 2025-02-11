@@ -68,10 +68,11 @@ public class Product {
     }
 
     public void decreaseQuantity() {
+        Integer minProduct = this.model.getController().getLabParameter().getProductMinQuantity();
         if (isSynchronized) {
             synchronized (this) {
                 state = "En proceso";
-                while (isPreventingNegativeStock && quantity <= 0) {
+                while (isPreventingNegativeStock && quantity <= minProduct) {
                     try {
                         wait();
                     } catch (InterruptedException e) {
@@ -86,7 +87,7 @@ public class Product {
             }
         } else {
             state = "En proceso";
-            if (isPreventingNegativeStock && quantity <= 0) {
+            if (isPreventingNegativeStock && quantity <= minProduct) {
                 return;
             }
             quantity--;
