@@ -110,6 +110,15 @@ public class TJTLModel {
         return random.nextInt(max - min + 1) + min;
     }
 
+    public Integer getTotalProducts(){
+        Integer totalProducts = 0;
+        for (Product product : this.products){
+            totalProducts += product.getQuantity();
+        }
+
+        return totalProducts;
+    }
+
     public void increaseFinalizedConsumerQuantity(){
         this.finalizedConsumerQuantity++;
     }

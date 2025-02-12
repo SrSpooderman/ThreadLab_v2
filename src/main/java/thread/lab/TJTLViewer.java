@@ -136,7 +136,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     }
 
     private void updateResults(){
-        //this.labResultsPanel.getProductQuantity().setText(String.valueOf(this.controller.getModel().getProducts().get(0).getQuantity()));
+        this.labResultsPanel.getProductQuantity().setText(String.valueOf(this.controller.getModel().getTotalProducts()));
 
         this.labResultsPanel.getProducerQuantity().setText(String.valueOf(this.controller.getModel().getProducers().size()));
         this.labResultsPanel.getConsumerQuantity().setText(String.valueOf(this.controller.getModel().getConsumers().size()));

@@ -99,14 +99,14 @@ public class Product {
 
     private void checkOverflow() {
         if (quantity > maxQuantity) {
-            overflow += (quantity - maxQuantity);
+            overflow = (quantity - maxQuantity);
             state = "Overflow";
         }
     }
 
     private void checkUnderflow() {
         if (quantity < minQuantity) {
-            underflow += (minQuantity - quantity);
+            underflow = (minQuantity - quantity);
             state = "Underflow";
         }
     }
