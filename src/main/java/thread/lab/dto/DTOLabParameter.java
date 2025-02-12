@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DTOLabParameter {
+    private Integer numberProducts;
     private Integer productMaxQuantity;
     private Integer productMinQuantity;
 
@@ -35,6 +36,7 @@ public class DTOLabParameter {
     }
 
     public void resetData(){
+        this.numberProducts = 1;
         this.productMaxQuantity = 1;
         this.productMinQuantity = 1;
 
@@ -63,7 +65,8 @@ public class DTOLabParameter {
     @Override
     public String toString() {
         return "DTOLabParameter{" +
-                "productMaxQuantity=" + productMaxQuantity +
+                "numberProducts=" + numberProducts +
+                ", productMaxQuantity=" + productMaxQuantity +
                 ", productMinQuantity=" + productMinQuantity +
                 ", numberProducers=" + numberProducers +
                 ", numberConsumers=" + numberConsumers +

@@ -9,6 +9,7 @@ import java.awt.*;
 @Getter
 @Setter
 public class LabParameterPanel extends JPanel {
+    private JSpinner numberProducts;
     private JSpinner productMaxQuantity;
     private JSpinner productMinQuantity;
 
@@ -31,6 +32,7 @@ public class LabParameterPanel extends JPanel {
     private JCheckBox isPreventingNegativeStock;
 
     public LabParameterPanel(){
+        this.numberProducts = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
         this.productMaxQuantity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
         this.productMinQuantity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
@@ -75,6 +77,12 @@ public class LabParameterPanel extends JPanel {
         constraints.gridwidth = 1;
         constraints.gridy++;
         constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Number of Products:"), constraints);
+        constraints.gridx = 1;
+        add(numberProducts, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy++;
         add(new JLabel("Product Max Quantity:"), constraints);
         constraints.gridx = 1;
         add(productMaxQuantity, constraints);

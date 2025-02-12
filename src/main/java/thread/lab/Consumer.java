@@ -9,6 +9,7 @@ import java.util.Random;
 @Setter
 public class Consumer implements Runnable {
     private TJTLModel model;
+    private Product product;
     private String consumerID;
     private String resourceBound;
     private Integer consumeDelay;
@@ -18,10 +19,11 @@ public class Consumer implements Runnable {
     private long startTime;
     private long endTime;
 
-    public Consumer(TJTLModel model, String consumerID, String resourceBound) {
+    public Consumer(TJTLModel model, String consumerID, Product product) {
         this.model = model;
+        this.product = product;
         this.consumerID = consumerID;
-        this.resourceBound = resourceBound;
+        this.resourceBound = product.getProductID();
         this.consumption = 0;
     }
 
@@ -45,7 +47,7 @@ public class Consumer implements Runnable {
                         return;
                     }
                 }
-                this.model.getProduct().decreaseQuantity();
+                this.product.decreaseQuantity();
                 consumption++;
                 Thread.sleep(randomConsumerDelay());
             }

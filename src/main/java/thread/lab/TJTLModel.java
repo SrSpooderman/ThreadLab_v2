@@ -12,13 +12,14 @@ import java.util.Random;
 @Setter
 public class TJTLModel {
     private TJTLController controller;
-    private Product product;
 
     //Hilos consumidores y productores
     private Thread producerThreadGenerator;
     private Thread consumerThreadGenerator;
     private List<Producer> producers;
     private List<Consumer> consumers;
+
+    private List<Product> products;
 
     private Integer finalizedConsumerQuantity;
     private Integer finalizedProducerQuantity;
@@ -33,6 +34,7 @@ public class TJTLModel {
         this.producerThreadGenerator = new Thread(this::runProducers);
         this.consumerThreadGenerator = new Thread(this::runConsumers);
 
+        createProducts();
         producerThreadGenerator.start();
         consumerThreadGenerator.start();
     }
@@ -43,18 +45,25 @@ public class TJTLModel {
 
         this.producers = new ArrayList<>();
         this.consumers = new ArrayList<>();
-
-        this.product = new Product(this, "Alpha");
+        this.products = new ArrayList<>();
     }
 
+    public void createProducts(){
+        int numberProducts = this.controller.getLabParameter().getNumberProducts();
+        for (int i=0; i < numberProducts; i++){
+            Product product = new Product(this, "Product-"+i);
+            this.products.add(product);
+        }
+    }
     public void runProducers(){
         int numberProducers = this.controller.getLabParameter().getNumberProducers();
         for (int i=0; i < numberProducers; i++){
+            Product product = this.products.get(new Random().nextInt(products.size()));
             //Cerrado de hilo
             if (this.getController().getLabParameter().isStopRequest()) {
                 return;
             }
-            Producer producer = new Producer(this, "Producer-"+i, this.product.getProductID());
+            Producer producer = new Producer(this, "Producer-"+i, product);
             producers.add(producer);
 
             Thread producerThread = new Thread(producer);
@@ -70,12 +79,13 @@ public class TJTLModel {
     public void runConsumers(){
         int numberConsumers = this.controller.getLabParameter().getNumberConsumers();
         for(int i=0; i < numberConsumers; i++){
+            Product product = this.products.get(new Random().nextInt(products.size()));
             //Cerrado de hilo
             if (this.getController().getLabParameter().isStopRequest()) {
                 return;
             }
 
-            Consumer consumer = new Consumer(this, "Consumer-"+i, this.product.getProductID());
+            Consumer consumer = new Consumer(this, "Consumer-"+i, product);
             consumers.add(consumer);
 
             Thread consumerThread = new Thread(consumer);

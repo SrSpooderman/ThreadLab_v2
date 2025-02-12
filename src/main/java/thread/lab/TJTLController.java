@@ -40,6 +40,7 @@ public class TJTLController {
 
     public void updateLabParameterDTO(){
         // Resource Settings
+        this.labParameter.setNumberProducts((Integer) this.viewer.getLabParameterPanel().getNumberProducts().getValue());
         this.labParameter.setProductMaxQuantity((Integer) this.viewer.getLabParameterPanel().getProductMaxQuantity().getValue());
         this.labParameter.setProductMinQuantity((Integer) this.viewer.getLabParameterPanel().getProductMinQuantity().getValue());
 

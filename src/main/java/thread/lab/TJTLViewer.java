@@ -105,6 +105,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
 
     private void updateLabParameterPanel(){
         // Resource Settings
+        this.labParameterPanel.getNumberProducts().setValue(this.controller.getLabParameter().getNumberProducts());
         this.labParameterPanel.getProductMaxQuantity().setValue(this.controller.getLabParameter().getProductMaxQuantity());
         this.labParameterPanel.getProductMinQuantity().setValue(this.controller.getLabParameter().getProductMinQuantity());
 
@@ -134,7 +135,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     }
 
     private void updateResults(){
-        this.labResultsPanel.getProductQuantity().setText(String.valueOf(this.controller.getModel().getProduct().getQuantity()));
+        //this.labResultsPanel.getProductQuantity().setText(String.valueOf(this.controller.getModel().getProducts().get(0).getQuantity()));
 
         this.labResultsPanel.getProducerQuantity().setText(String.valueOf(this.controller.getModel().getProducers().size()));
         this.labResultsPanel.getConsumerQuantity().setText(String.valueOf(this.controller.getModel().getConsumers().size()));
@@ -144,9 +145,15 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     }
 
     private void updateProductPanel(){
-        Product product = this.controller.getModel().getProduct();
+        List<Product> products = new ArrayList<>(this.controller.getModel().getProducts());
 
-        this.productPanel.addOrUpdateProduct(product);
+        for (Product product : products){
+            if (this.controller.getLabParameter().isStopRequest()){
+                return;
+            }
+
+            this.productPanel.addOrUpdateProduct(product);
+        }
     }
 
     private void updateConsumersPanel(){

@@ -9,6 +9,7 @@ import java.util.Random;
 @Setter
 public class Producer implements Runnable {
     private TJTLModel model;
+    private  Product product;
     private String producerID;
     private String resourceBound;
     private Integer produceDelay;
@@ -18,10 +19,11 @@ public class Producer implements Runnable {
     private long startTime;
     private long endTime;
 
-    public Producer(TJTLModel model, String producerID, String resourceBound) {
+    public Producer(TJTLModel model, String producerID, Product product) {
         this.model = model;
+        this.product = product;
         this.producerID = producerID;
-        this.resourceBound = resourceBound;
+        this.resourceBound = product.getProductID();
         this.production = 0;
     }
 
@@ -45,7 +47,7 @@ public class Producer implements Runnable {
                         return;
                     }
                 }
-                model.getProduct().increaseQuantity();
+                product.increaseQuantity();
                 production++;
                 Thread.sleep(randomProducerDelay());
             }
