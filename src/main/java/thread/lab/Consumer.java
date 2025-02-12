@@ -33,22 +33,31 @@ public class Consumer implements Runnable {
             this.startTime = System.currentTimeMillis();
             status = "Esperando para consumir";
 
-            int itemQuantity = model.getController().getLabParameter().getConsumerItemQuantity();
+            int cycles = model.getController().getLabParameter().getConsumerCycles();
+            boolean isCyclesActive = model.getController().getLabParameter().isCyclesActive();
 
             status = "Consumiendo";
-            for (int i = 0; i < itemQuantity; i++) {
+
+            while (!isCyclesActive || cycles > 0) {
                 //Cerrado y pausado de hilo
                 if (this.model.getController().getLabParameter().isStopRequest()){
                     return;
                 }
+
                 while (!model.getController().getLabParameter().isRunning()) {
                     Thread.sleep(100);
                     if (this.model.getController().getLabParameter().isStopRequest()){
                         return;
                     }
                 }
-                this.product.decreaseQuantity();
+
+                product.decreaseQuantity();
                 consumption++;
+
+                if (isCyclesActive){
+                    cycles--;
+                }
+
                 Thread.sleep(randomConsumerDelay());
             }
             status = "Finalizado";

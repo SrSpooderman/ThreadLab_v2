@@ -25,6 +25,7 @@ public class LabParameterPanel extends JPanel {
     private JSpinner consumeMaxTime;
     private JSpinner consumeMinTime;
 
+    private JCheckBox isCyclesActive;
     private JSpinner producerCycles;
     private JSpinner consumerCycles;
 
@@ -48,6 +49,7 @@ public class LabParameterPanel extends JPanel {
         this.consumeMaxTime = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
         this.consumeMinTime = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
+        this.isCyclesActive = new JCheckBox();
         this.producerCycles = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
         this.consumerCycles = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 
@@ -185,9 +187,17 @@ public class LabParameterPanel extends JPanel {
         lifecycleLabel.setFont(sectionFont);
         add(lifecycleLabel, constraints);
 
-        constraints.gridwidth = 1;
+        constraints.gridx = 0;
         constraints.gridy++;
+        constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Active Cycles Limit"), constraints);
+        constraints.gridx = 1;
+        add(isCyclesActive, constraints);
+
+
+        constraints.gridy++;
+        constraints.gridx = 0;
         add(new JLabel("Producer Cycles:"), constraints);
         constraints.gridx = 1;
         add(producerCycles, constraints);

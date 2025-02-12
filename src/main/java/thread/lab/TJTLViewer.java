@@ -126,8 +126,9 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         this.labParameterPanel.getConsumeMinTime().setValue(this.controller.getLabParameter().getConsumeMinTime());
 
         // Lifecycle
-        this.labParameterPanel.getProducerCycles().setValue(this.controller.getLabParameter().getProducerItemQuantity());
-        this.labParameterPanel.getConsumerCycles().setValue(this.controller.getLabParameter().getConsumerItemQuantity());
+        this.labParameterPanel.getIsCyclesActive().setSelected(this.controller.getLabParameter().isCyclesActive());
+        this.labParameterPanel.getProducerCycles().setValue(this.controller.getLabParameter().getProducerCycles());
+        this.labParameterPanel.getConsumerCycles().setValue(this.controller.getLabParameter().getConsumerCycles());
 
         // Operation Settings
         this.labParameterPanel.getIsSynchronized().setSelected(this.controller.getLabParameter().isSynchronized());

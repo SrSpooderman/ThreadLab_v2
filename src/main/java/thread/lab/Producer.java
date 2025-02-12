@@ -31,24 +31,34 @@ public class Producer implements Runnable {
     public void run() {
         try {
             this.startTime = System.currentTimeMillis();
-            status = "Esperando para iniciar";
+            status = "Esperando para producir";
 
-            int itemQuantity = model.getController().getLabParameter().getProducerItemQuantity();
+            int cycles = model.getController().getLabParameter().getProducerCycles();
+            boolean isCyclesActive = model.getController().getLabParameter().isCyclesActive();
 
             status = "Produciendo";
-            for (int i = 0; i < itemQuantity; i++) {
+
+
+            while (!isCyclesActive || cycles > 0) {
                 //Cerrado de hilo y pausa de hilo
-                if (this.model.getController().getLabParameter().isStopRequest()){
+                if (this.model.getController().getLabParameter().isStopRequest()) {
                     return;
                 }
+
                 while (!model.getController().getLabParameter().isRunning()) {
-                    Thread.sleep(100);
-                    if (this.model.getController().getLabParameter().isStopRequest()){
+                    Thread.sleep(10);
+                    if (this.model.getController().getLabParameter().isStopRequest()) {
                         return;
                     }
                 }
+
                 product.increaseQuantity();
                 production++;
+
+                if (isCyclesActive) {
+                    cycles--;
+                }
+
                 Thread.sleep(randomProducerDelay());
             }
             status = "Finalizado";

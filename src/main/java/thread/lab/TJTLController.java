@@ -61,8 +61,9 @@ public class TJTLController {
         this.labParameter.setConsumeMinTime((Integer) this.viewer.getLabParameterPanel().getConsumeMinTime().getValue());
 
         // Lifecycle
-        this.labParameter.setProducerItemQuantity((Integer) this.viewer.getLabParameterPanel().getProducerCycles().getValue());
-        this.labParameter.setConsumerItemQuantity((Integer) this.viewer.getLabParameterPanel().getConsumerCycles().getValue());
+        this.labParameter.setCyclesActive(this.viewer.getLabParameterPanel().getIsCyclesActive().isSelected());
+        this.labParameter.setProducerCycles((Integer) this.viewer.getLabParameterPanel().getProducerCycles().getValue());
+        this.labParameter.setConsumerCycles((Integer) this.viewer.getLabParameterPanel().getConsumerCycles().getValue());
 
         // Operation Settings
         this.labParameter.setSynchronized(this.viewer.getLabParameterPanel().getIsSynchronized().isSelected());

@@ -22,8 +22,9 @@ public class DTOLabParameter {
     private Integer consumeMaxTime;
     private Integer consumeMinTime;
 
-    private Integer producerItemQuantity;
-    private Integer consumerItemQuantity;
+    private boolean isCyclesActive;
+    private Integer producerCycles;
+    private Integer consumerCycles;
 
     private boolean isSynchronized;
     private boolean isPreventingNegativeStock;
@@ -52,8 +53,9 @@ public class DTOLabParameter {
         this.consumeMaxTime = 1;
         this.consumeMinTime = 1;
 
-        this.producerItemQuantity = 1;
-        this.consumerItemQuantity = 1;
+        this.isCyclesActive = true;
+        this.producerCycles = 1;
+        this.consumerCycles = 1;
 
         this.isSynchronized = false;
         this.isPreventingNegativeStock = false;
@@ -76,8 +78,9 @@ public class DTOLabParameter {
                 ", produceMinTime=" + produceMinTime +
                 ", consumeMaxTime=" + consumeMaxTime +
                 ", consumeMinTime=" + consumeMinTime +
-                ", producerItemQuantity=" + producerItemQuantity +
-                ", consumerItemQuantity=" + consumerItemQuantity +
+                ", isCyclesActive=" + isCyclesActive +
+                ", producerItemQuantity=" + producerCycles +
+                ", consumerItemQuantity=" + consumerCycles +
                 ", isSynchronized=" + isSynchronized +
                 ", isPreventingNegativeStock=" + isPreventingNegativeStock +
                 ", isRunning=" + isRunning +
