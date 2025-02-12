@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     private ProductPanel productPanel;
     private ProducersPanel producersPanel;
     private ConsumersPanel consumersPanel;
+    private long startTime;
 
     public TJTLViewer (TJTLController controller){
         this.controller = controller;
@@ -30,7 +32,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         this.productPanel = new ProductPanel();
         this.consumersPanel = new ConsumersPanel();
         this.producersPanel = new ProducersPanel();
-
+        this.startTime = 0;
         configureJFrame();
     }
 
@@ -185,12 +187,24 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         this.controller.getLabParameter().setStopRequest(false);
         this.controller.getLabParameter().setRunning(true);
         this.controller.getModel().resetVariables();
+        this.startTime = 0;
 
         updateLabParameterPanel();
 
         this.producersPanel.clearProducers();
         this.consumersPanel.clearConsumers();
         this.productPanel.clearProducts();
+    }
+
+    private void updateTime(){
+        if (startTime == 0){
+            this.labResultsPanel.getTotalTimer().setText("00:00:000");
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SSS");
+            long thisTime = System.currentTimeMillis();
+            long resultTime = thisTime - this.startTime;
+            this.labResultsPanel.getTotalTimer().setText(formatter.format(resultTime));
+        }
     }
 
     @Override
@@ -202,6 +216,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
                 this.controller.updateLabParameterDTO();
                 resetProgram();
                 this.controller.startModel();
+                this.startTime = System.currentTimeMillis();
                 break;
             case "PAUSE":
                 if (this.controller.getLabParameter().isRunning()){
@@ -247,7 +262,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
             updateProductPanel();
             updateConsumersPanel();
             updateProducersPanel();
-
+            updateTime();
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {

@@ -3,6 +3,7 @@ package thread.lab;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.text.SimpleDateFormat;
 import java.util.Random;
 
 @Getter
@@ -81,5 +82,18 @@ public class Consumer implements Runnable {
         Integer result = random.nextInt(max - min + 1) + min;
         this.consumeDelay = result;
         return result;
+    }
+
+    public String getStartTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
+        return formatter.format(this.startTime);
+    }
+
+    public String getEndTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
+        if (endTime == 0){
+            return "No ha finalizado";
+        }
+        return formatter.format(this.endTime);
     }
 }
