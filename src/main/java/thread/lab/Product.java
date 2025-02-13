@@ -122,7 +122,7 @@ public class Product {
     }
 
     private synchronized void decreaseQuantitySynchronizedWithProtection() {
-        Integer minProduct = this.model.getController().getLabParameter().getProductMinQuantity();;
+        Integer minProduct = this.model.getController().getLabParameter().getProductMinQuantity();
         state = "En proceso";
 
         while (quantity <= minProduct) {
@@ -147,7 +147,7 @@ public class Product {
         updateState();
     }
     private void decreaseQuantityUnsynchronizedWithProtection() {
-        Integer minProduct = this.model.getController().getLabParameter().getProductMinQuantity();;
+        Integer minProduct = this.model.getController().getLabParameter().getProductMinQuantity();
         state = "En proceso";
 
         System.out.println("NO SYNC SI 0 :"+quantity);
