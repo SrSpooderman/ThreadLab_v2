@@ -60,173 +60,212 @@ public class LabParameterPanel extends JPanel {
     }
 
     private void addComponentsToPanel(){
+        setBackground(new Color(0x31241b));
+        setBorder(BorderFactory.createLineBorder(new Color(0x5e9af7), 3));
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.insets = new Insets(5, 5, 5, 5);
 
-        //Fuentes
-        Font sectionFont = new Font("Arial", Font.BOLD, 14);
-
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        JLabel resourceLabel = new JLabel("Resource Settings");
-        resourceLabel.setFont(sectionFont);
-        add(resourceLabel, constraints);
+        add(paragraphLabel("Resource Settings"), constraints);
 
         constraints.gridwidth = 1;
         constraints.gridy++;
         constraints.anchor = GridBagConstraints.WEST;
-        add(new JLabel("Number of Products:"), constraints);
+        add(textSpinnerLabel("Number of Products:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(numberProducts);
         add(numberProducts, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Product Max Quantity:"), constraints);
+        add(textSpinnerLabel("Product Max Quantity:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(productMaxQuantity);
         add(productMaxQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Product Min Quantity:"), constraints);
+        add(textSpinnerLabel("Product Min Quantity:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(productMinQuantity);
         add(productMinQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        JLabel producerConsumerLabel = new JLabel("Producer/Consumer Count");
-        producerConsumerLabel.setFont(sectionFont);
-        add(producerConsumerLabel, constraints);
+        add(paragraphLabel("Producer/Consumer Count"), constraints);
 
         constraints.gridwidth = 1;
         constraints.gridy++;
         constraints.anchor = GridBagConstraints.WEST;
-        add(new JLabel("Number of Producers:"), constraints);
+        add(textSpinnerLabel("Number of Producers:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(numberProducers);
         add(numberProducers, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Number of Consumers:"), constraints);
+        add(textSpinnerLabel("Number of Consumers:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(numberConsumers);
         add(numberConsumers, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        JLabel startDelayLabel = new JLabel("Start Delay Settings");
-        startDelayLabel.setFont(sectionFont);
-        add(startDelayLabel, constraints);
+        add(paragraphLabel("Start Delay Settings"), constraints);
 
         constraints.gridwidth = 1;
         constraints.gridy++;
         constraints.anchor = GridBagConstraints.WEST;
-        add(new JLabel("Start Delay Max:"), constraints);
+        add(textSpinnerLabel("Start Delay Max:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(startDelayMax);
         add(startDelayMax, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Start Delay Min:"), constraints);
+        add(textSpinnerLabel("Start Delay Min:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(startDelayMin);
         add(startDelayMin, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        JLabel producerTimingLabel = new JLabel("Producer Timing");
-        producerTimingLabel.setFont(sectionFont);
-        add(producerTimingLabel, constraints);
+        add(paragraphLabel("Producer Timing"), constraints);
 
         constraints.gridwidth = 1;
         constraints.gridy++;
         constraints.anchor = GridBagConstraints.WEST;
-        add(new JLabel("Produce Max Time:"), constraints);
+        add(textSpinnerLabel("Produce Max Time:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(produceMaxTime);
         add(produceMaxTime, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Produce Min Time:"), constraints);
+        add(textSpinnerLabel("Produce Min Time:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(produceMinTime);
         add(produceMinTime, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        JLabel consumerTimingLabel = new JLabel("Consumer Timing");
-        consumerTimingLabel.setFont(sectionFont);
-        add(consumerTimingLabel, constraints);
+        add(paragraphLabel("Consumer Timing"), constraints);
 
         constraints.gridwidth = 1;
         constraints.gridy++;
         constraints.anchor = GridBagConstraints.WEST;
-        add(new JLabel("Consume Max Time:"), constraints);
+        add(textSpinnerLabel("Consume Max Time:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(consumeMaxTime);
         add(consumeMaxTime, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Consume Min Time:"), constraints);
+        add(textSpinnerLabel("Consume Min Time:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(consumeMinTime);
         add(consumeMinTime, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        JLabel lifecycleLabel = new JLabel("Lifecycle");
-        lifecycleLabel.setFont(sectionFont);
-        add(lifecycleLabel, constraints);
+        add(paragraphLabel("Lifecycle"), constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.WEST;
-        add(new JLabel("Active Cycles Limit"), constraints);
+        add(textSpinnerLabel("Active Cycles Limit"), constraints);
         constraints.gridx = 1;
+        configureCheckBox(isCyclesActive);
         add(isCyclesActive, constraints);
 
 
         constraints.gridy++;
         constraints.gridx = 0;
-        add(new JLabel("Producer Cycles:"), constraints);
+        add(textSpinnerLabel("Producer Cycles:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(producerCycles);
         add(producerCycles, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Consumer Cycles:"), constraints);
+        add(textSpinnerLabel("Consumer Cycles:"), constraints);
         constraints.gridx = 1;
+        configureSpinner(consumerCycles);
         add(consumerCycles, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        JLabel operationLabel = new JLabel("Operation Settings");
-        operationLabel.setFont(sectionFont);
-        add(operationLabel, constraints);
+        add(paragraphLabel("Operation Settings"), constraints);
 
         constraints.gridwidth = 1;
         constraints.gridy++;
         constraints.anchor = GridBagConstraints.WEST;
-        add(new JLabel("Synchronized:"), constraints);
+        add(textSpinnerLabel("Synchronized:"), constraints);
         constraints.gridx = 1;
+        configureCheckBox(isSynchronized);
         add(isSynchronized, constraints);
 
         constraints.gridx = 0;
         constraints.gridy++;
-        add(new JLabel("Prevent Negative Stock:"), constraints);
+        add(textSpinnerLabel("Prevent Negative Stock:"), constraints);
         constraints.gridx = 1;
+        configureCheckBox(isPreventingNegativeStock);
         add(isPreventingNegativeStock, constraints);
+    }
+
+    private JLabel paragraphLabel(String text){
+        Color colorForeground = new Color(0x9f998f);
+        Font sectionFont = new Font("Times New Roman", Font.BOLD, 20);
+        JLabel label = new JLabel(text);
+        label.setFont(sectionFont);
+        label.setForeground(colorForeground);
+        return label;
+    }
+    private JLabel textSpinnerLabel(String text){
+        Color colorForeground = new Color(0x9f998f);
+        Font labelFont = new Font("Times New Roman", Font.PLAIN, 16);
+        JLabel label = new JLabel(text);
+        label.setFont(labelFont);
+        label.setForeground(colorForeground);
+        return label;
+    }
+    private void configureSpinner(JSpinner spinner){
+        JComponent editor = spinner.getEditor();
+        Font spinnerFont = new Font("Times New Roman", Font.BOLD, 16);
+        if (editor instanceof JSpinner.NumberEditor defaultEditor) {
+            JTextField textField = defaultEditor.getTextField();
+            textField.setHorizontalAlignment(JTextField.CENTER);
+            textField.setBackground(new Color(0x31241b));
+            textField.setForeground(new Color(0x9f998f));
+            textField.setFont(spinnerFont);
+        }
+        spinner.setBorder(BorderFactory.createLineBorder(new Color(0x9f998f), 2));
+    }
+    private void configureCheckBox(JCheckBox checkBox) {
+        Color backgroundColor = new Color(0x9f998f);
+        Color foregroundColor = new Color(0x6d5742);
+        Color borderColor = new Color(0x5e9af7);
+
+        checkBox.setBackground(backgroundColor);
+        checkBox.setForeground(foregroundColor);
+        checkBox.setBorder(BorderFactory.createLineBorder(borderColor, 2));
     }
 }

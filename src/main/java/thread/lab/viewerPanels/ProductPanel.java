@@ -18,17 +18,19 @@ public class ProductPanel extends JPanel {
     private final Map<String, Integer> productRows;
 
     public ProductPanel(){
-     setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
+        setBackground(new Color(0x31241b));
+        setBorder(BorderFactory.createLineBorder(new Color(0x5e9af7), 3));
 
-     String[] columnNames = {"Product ID", "Quantity", "Max Quantity", "Min Quantity", "Quantity Consumed", "Quantity Produced", "Underflow", "Overflow", "State"};
-     this.model = new DefaultTableModel(columnNames, 0);
-     this.table = new JTable(model);
-     this.table.setDefaultEditor(Object.class, null);
+         String[] columnNames = {"Product ID", "Quantity", "Max Quantity", "Min Quantity", "Quantity Consumed", "Quantity Produced", "Underflow", "Overflow", "State"};
+         this.model = new DefaultTableModel(columnNames, 0);
+         this.table = new JTable(model);
+         this.table.setDefaultEditor(Object.class, null);
 
-     JScrollPane scrollPane = new JScrollPane(table);
-     add(scrollPane, BorderLayout.CENTER);
+         JScrollPane scrollPane = new JScrollPane(table);
+         add(scrollPane, BorderLayout.CENTER);
 
-     productRows = new HashMap<>();
+         productRows = new HashMap<>();
     }
 
     public void addOrUpdateProduct(Product product){

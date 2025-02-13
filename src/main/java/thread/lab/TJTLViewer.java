@@ -5,6 +5,8 @@ import lombok.Setter;
 import thread.lab.viewerPanels.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,7 +49,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
     }
 
     private void addComponentsToPane(Container panel){
-        panel.setBackground(new Color(44,47,51));
+        panel.setBackground(new Color(0x31241b));
         GridBagConstraints constraints = new GridBagConstraints();
 
         //Creo un panel por columna
@@ -55,11 +57,18 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         JPanel centerPanel = new JPanel(new GridBagLayout());
         JPanel rightPanel = new JPanel(new GridBagLayout());
 
+        leftPanel.setBackground(new Color(0x31241b));
+        centerPanel.setBackground(new Color(0x31241b));
+        rightPanel.setBackground(new Color(0x31241b));
+
         addComponentToColumn(leftPanel,0,0, 1F, 0.7F,labParameterPanel);
         addComponentToColumn(leftPanel,0,1, 1F, 0.3F,controlPanel);
 
         addComponentToColumn(centerPanel,0,0, 1F, 1F,labResultsPanel);
 
+        configureJTable(productPanel.getTable());
+        configureJTable(producersPanel.getTable());
+        configureJTable(consumersPanel.getTable());
         addComponentToColumn(rightPanel,0,0, 1F, 0.3F,productPanel);
         addComponentToColumn(rightPanel,0,1,1F,0.3F,consumersPanel);
         addComponentToColumn(rightPanel,0,2,1F,0.3F,producersPanel);
@@ -96,6 +105,41 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         constraints.insets = new Insets(5, 5, 5, 5);
 
         column.add(component, constraints);
+    }
+
+    private void configureJTable(JTable jTable){
+        Color headerBackground = new Color(0x5e9af7);
+        Color headerForeground = new Color(0xFFFFFF);
+        Color rowEven = new Color(0xE0DCC8);
+        Color rowOdd = new Color(0xC7B9A0);
+        Color textForeground = new Color(0x31241b);
+
+        JTableHeader header = jTable.getTableHeader();
+        header.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        header.setBackground(headerBackground);
+        header.setForeground(headerForeground);
+
+        jTable.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+        jTable.setForeground(textForeground);
+        jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable.setFocusable(false);
+
+        jTable.setCellSelectionEnabled(false);
+        jTable.setRowSelectionAllowed(false);
+        jTable.setColumnSelectionAllowed(false);
+
+        jTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (row % 2 == 0) {
+                    cell.setBackground(rowEven);
+                } else {
+                    cell.setBackground(rowOdd);
+                }
+                return cell;
+            }
+        });
     }
 
     private void confButtonFunc(){
@@ -217,6 +261,17 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
                 resetProgram();
                 this.controller.startModel();
                 this.startTime = System.currentTimeMillis();
+
+                this.controlPanel.getStart().setText("RESTART");
+                this.controlPanel.getStart().setSelected(true);
+                break;
+            case "RESTART":
+                this.controller.updateLabParameterDTO();
+                resetProgram();
+                this.controller.startModel();
+                this.startTime = System.currentTimeMillis();
+
+                this.controlPanel.getStart().setSelected(true);
                 break;
             case "PAUSE":
                 if (this.controller.getLabParameter().isRunning()){
@@ -225,9 +280,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
                     System.out.println("Sistema ya pausado");
                 }
                 this.controlPanel.getPause().setText("CONTINUE");
-                this.controlPanel.getStart().setSelected(true);
                 break;
-
             case "CONTINUE":
                 if (!this.controller.getLabParameter().isRunning()){
                     this.controller.getLabParameter().setRunning(true);
@@ -235,13 +288,14 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
                     System.out.println("Sistema ya en ejecucion");
                 }
                 this.controlPanel.getPause().setText("PAUSE");
-                this.controlPanel.getStart().setSelected(false);
                 break;
             case "RESET":
                 resetProgram();
-
                 this.controlPanel.getStart().setSelected(false);
                 this.controlPanel.getStart().setText("START");
+
+                this.controlPanel.getPause().setText("PAUSE");
+                this.controlPanel.getPause().setSelected(false);
                 break;
             case "DEFAULT":
                 this.controller.resetDTO();

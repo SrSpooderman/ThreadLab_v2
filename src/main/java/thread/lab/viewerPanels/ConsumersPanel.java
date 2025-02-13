@@ -1,5 +1,7 @@
 package thread.lab.viewerPanels;
 
+import lombok.Getter;
+import lombok.Setter;
 import thread.lab.Consumer;
 
 import javax.swing.*;
@@ -8,6 +10,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
 public class ConsumersPanel extends JPanel {
     private final JTable table;
     private final DefaultTableModel model;
@@ -15,6 +19,8 @@ public class ConsumersPanel extends JPanel {
 
     public ConsumersPanel(){
         setLayout(new BorderLayout());
+        setBackground(new Color(0x31241b));
+        setBorder(BorderFactory.createLineBorder(new Color(0x5e9af7), 3));
 
         String[] columnNames = {"Consumer ID", "Resource", "Consume delay", "Status", "Consumption", "Processing Time", "Start Time", "End Time"};
         this.model = new DefaultTableModel(columnNames, 0);

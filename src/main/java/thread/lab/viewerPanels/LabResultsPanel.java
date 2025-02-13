@@ -45,6 +45,9 @@ public class LabResultsPanel extends JPanel {
     }
 
     private void addComponentsToPanel() {
+        setBackground(new Color(0x31241b));
+        setBorder(BorderFactory.createLineBorder(new Color(0x5e9af7), 3));
+
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -52,44 +55,66 @@ public class LabResultsPanel extends JPanel {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        add(new JLabel("Product Quantity:"), constraints);
+        add(textLabel("Product Quantity:"), constraints);
 
         constraints.gridx = 1;
+        configureTextField(productQuantity);
         add(productQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        add(new JLabel("Producer Quantity:"), constraints);
+        add(textLabel("Producer Quantity:"), constraints);
 
         constraints.gridx = 1;
+        configureTextField(producerQuantity);
         add(producerQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 2;
-        add(new JLabel("Consumer Quantity:"), constraints);
+        add(textLabel("Consumer Quantity:"), constraints);
 
         constraints.gridx = 1;
+        configureTextField(consumerQuantity);
         add(consumerQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 3;
-        add(new JLabel("Finalized Producer Quantity:"), constraints);
+        add(textLabel("Finalized Producer Quantity:"), constraints);
 
         constraints.gridx = 1;
+        configureTextField(finalizedProducerQuantity);
         add(finalizedProducerQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 4;
-        add(new JLabel("Finalized Consumer Quantity:"), constraints);
+        add(textLabel("Finalized Consumer Quantity:"), constraints);
 
         constraints.gridx = 1;
+        configureTextField(finalizedConsumerQuantity);
         add(finalizedConsumerQuantity, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 5;
-        add(new JLabel("Total Timer:"), constraints);
+        add(textLabel("Total Timer:"), constraints);
 
         constraints.gridx = 1;
+        configureTextField(totalTimer);
         add(totalTimer, constraints);
+    }
+
+    private JLabel textLabel(String text){
+        Color colorForeground = new Color(0x9f998f);
+        Font labelFont = new Font("Times New Roman", Font.PLAIN, 20);
+        JLabel label = new JLabel(text);
+        label.setFont(labelFont);
+        label.setForeground(colorForeground);
+        return label;
+    }
+    private void configureTextField(JTextField textField){
+        Font font = new Font("Times New Roman", Font.BOLD, 16);
+        textField.setHorizontalAlignment(JTextField.CENTER);
+        textField.setBackground(new Color(0x31241b));
+        textField.setForeground(new Color(0x9f998f));
+        textField.setFont(font);
     }
 }
