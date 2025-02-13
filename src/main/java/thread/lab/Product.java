@@ -52,22 +52,22 @@ public class Product {
         if (isSynchronized) {
             synchronized (this) {
                 state = "En proceso";
-                checkOverflow();
                 quantity++;
+                checkOverflow();
                 quantityProduced++;
                 updateState();
                 notify();
             }
         } else {
             state = "En proceso";
-            checkOverflow();
             quantity++;
+            checkOverflow();
             quantityProduced++;
             updateState();
         }
     }
 
-    public void decreaseQuantity() {
+    /*public void decreaseQuantity() {
         Integer minProduct = this.model.getController().getLabParameter().getProductMinQuantity();
         if (isSynchronized) {
             synchronized (this) {
@@ -80,21 +80,98 @@ public class Product {
                         return;
                     }
                 }
-                checkUnderflow();
                 quantity--;
+                checkUnderflow();
                 quantityConsumed++;
-                //updateState();
+                updateState();
             }
         } if (!isSynchronized){
             state = "En proceso";
             if (isPreventingNegativeStock && quantity <= minProduct) {
                 return;
             }
-            quantity--;
+
+            int temp = quantity;
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            quantity = temp-1;
+
             checkUnderflow();
             quantityConsumed++;
-            //updateState();
+            updateState();
         }
+    }*/
+
+    public void decreaseQuantity() {
+        if (isSynchronized) {
+            if (isPreventingNegativeStock) {
+                decreaseQuantitySynchronizedWithProtection();
+            } else {
+                decreaseQuantitySynchronized();
+            }
+        } else {
+            if (isPreventingNegativeStock) {
+                decreaseQuantityUnsynchronizedWithProtection();
+            } else {
+                decreaseQuantityUnsynchronized();
+            }
+        }
+    }
+
+    private synchronized void decreaseQuantitySynchronizedWithProtection() {
+        Integer minProduct = this.model.getController().getLabParameter().getProductMinQuantity();;
+        state = "En proceso";
+
+        while (quantity <= minProduct) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+
+        quantity--;
+        quantityConsumed++;
+        checkUnderflow();
+        updateState();
+    }
+    private synchronized void decreaseQuantitySynchronized() {
+        state = "En proceso";
+        quantity--;
+        quantityConsumed++;
+        checkUnderflow();
+        updateState();
+    }
+    private void decreaseQuantityUnsynchronizedWithProtection() {
+        Integer minProduct = this.model.getController().getLabParameter().getProductMinQuantity();;
+        state = "En proceso";
+
+        System.out.println("NO SYNC SI 0 :"+quantity);
+
+        while (quantity <= minProduct) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+        checkUnderflow();
+        quantity--;
+        checkUnderflow();
+        quantityConsumed++;
+        updateState();
+    }
+    private void decreaseQuantityUnsynchronized() {
+        state = "En proceso";
+        quantity--;
+        quantityConsumed++;
+        checkUnderflow();
+        updateState();
     }
 
     private void checkOverflow() {
@@ -106,9 +183,9 @@ public class Product {
 
     private void checkUnderflow() {
         if (quantity < minQuantity) {
+            System.out.println(quantity + "------------------------------------");
             underflow += (minQuantity - quantity);
             state = "Underflow";
-            System.out.println(underflow);
         }
     }
 
