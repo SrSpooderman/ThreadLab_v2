@@ -88,12 +88,18 @@ public class Consumer implements Runnable {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
         return formatter.format(this.startTime);
     }
-
     public String getEndTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
         if (endTime == 0){
             return "No ha finalizado";
         }
         return formatter.format(this.endTime);
+    }
+    public String getProcessingTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
+        if (processingTime == 0){
+            return "No ha finalizado";
+        }
+        return formatter.format(this.processingTime);
     }
 }

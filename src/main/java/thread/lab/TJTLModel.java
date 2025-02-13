@@ -16,9 +16,9 @@ public class TJTLModel {
     //Hilos consumidores y productores
     private Thread producerThreadGenerator;
     private Thread consumerThreadGenerator;
+
     private List<Producer> producers;
     private List<Consumer> consumers;
-
     private List<Product> products;
 
     private Integer finalizedConsumerQuantity;
@@ -31,10 +31,10 @@ public class TJTLModel {
 
     public void start(){
         resetVariables();
+        createProducts();
+
         this.producerThreadGenerator = new Thread(this::runProducers);
         this.consumerThreadGenerator = new Thread(this::runConsumers);
-
-        createProducts();
         producerThreadGenerator.start();
         consumerThreadGenerator.start();
     }

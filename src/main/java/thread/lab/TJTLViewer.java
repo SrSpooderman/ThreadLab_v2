@@ -230,7 +230,7 @@ public class TJTLViewer extends JFrame implements Runnable, ActionListener {
         this.controller.stopAllThreads();
         this.controller.getLabParameter().setStopRequest(false);
         this.controller.getLabParameter().setRunning(true);
-        this.controller.getModel().resetVariables();
+        //this.controller.getModel().resetVariables();
         this.startTime = 0;
 
         updateLabParameterPanel();
