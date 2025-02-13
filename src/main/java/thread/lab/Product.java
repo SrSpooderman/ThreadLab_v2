@@ -52,17 +52,17 @@ public class Product {
         if (isSynchronized) {
             synchronized (this) {
                 state = "En proceso";
+                checkOverflow();
                 quantity++;
                 quantityProduced++;
-                checkOverflow();
                 updateState();
                 notify();
             }
         } else {
             state = "En proceso";
+            checkOverflow();
             quantity++;
             quantityProduced++;
-            checkOverflow();
             updateState();
         }
     }
@@ -80,34 +80,35 @@ public class Product {
                         return;
                     }
                 }
+                checkUnderflow();
                 quantity--;
                 quantityConsumed++;
-                checkUnderflow();
-                updateState();
+                //updateState();
             }
-        } else {
+        } if (!isSynchronized){
             state = "En proceso";
             if (isPreventingNegativeStock && quantity <= minProduct) {
                 return;
             }
             quantity--;
-            quantityConsumed++;
             checkUnderflow();
-            updateState();
+            quantityConsumed++;
+            //updateState();
         }
     }
 
     private void checkOverflow() {
         if (quantity > maxQuantity) {
-            overflow = (quantity - maxQuantity);
+            overflow += (quantity - maxQuantity);
             state = "Overflow";
         }
     }
 
     private void checkUnderflow() {
         if (quantity < minQuantity) {
-            underflow = (minQuantity - quantity);
+            underflow += (minQuantity - quantity);
             state = "Underflow";
+            System.out.println(underflow);
         }
     }
 
