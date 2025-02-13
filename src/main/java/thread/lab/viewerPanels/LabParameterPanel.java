@@ -65,7 +65,7 @@ public class LabParameterPanel extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.insets = new Insets(5, 5, 5, 5);
+        constraints.insets = new Insets(3, 3, 3, 3  );
 
         constraints.gridx = 0;
         constraints.gridy = 0;
